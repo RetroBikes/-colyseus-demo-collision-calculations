@@ -22,10 +22,6 @@ export class State extends Schema {
 
     createPlayer (id: string) {
         this.players[ id ] = new Player();
-
-        this.gameLoop = setInterval(() => {
-            this.movePlayer(id);
-        }, 100);
     }
 
     changePosition (id: string, position: string) {
@@ -34,7 +30,16 @@ export class State extends Schema {
 
     removePlayer (id: string) {
         delete this.players[ id ];
-        clearInterval(this.gameLoop);
+    }
+
+    getAllPlayerIds() {
+        return Object.keys(this.players);
+    }
+
+    makeGameStep() {
+        for (let playerId of this.getAllPlayerIds()) {
+            this.movePlayer(playerId)
+        }
     }
 
     movePlayer (id: string) {
@@ -62,6 +67,10 @@ export class MoverRoom extends Room<State> {
         console.log("StateHandlerRoom created!", options);
 
         this.setState(new State());
+
+        this.setSimulationInterval(() => {
+            this.state.makeGameStep();
+        });
     }
 
     onJoin (client: Client) {

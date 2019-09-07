@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Heading } from 'arwes';
+import { Button, Heading, Link } from 'arwes';
 import './home.css';
 
 class Home extends React.Component {
@@ -8,7 +8,9 @@ class Home extends React.Component {
       <div class="home">
         <div class="home-inner">
           <Heading node='h1'>React Colyseus Demo</Heading>
-          <Button animate layer='alert'>Entrar</Button>
+          <Button animate layer='alert'>
+            <Link href="/game">Entrar</Link>
+          </Button>
         </div>
       </div>
     );

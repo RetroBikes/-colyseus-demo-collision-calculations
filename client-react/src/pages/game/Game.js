@@ -8,44 +8,44 @@ class Game extends React.Component {
     super();
     const client = new Colyseus.Client('ws://localhost:2567');
     client.joinOrCreate('my_room').then(room => this.initializeGame(room));
-    this.players = {};
+    this.state = {
+      players: {},
+    };
   }
 
   render () {
     return (
       <div class="game">
       <Frame animate={true} level={3} corners={4} layer='primary' classes="game-frame">
+        {Object.keys(this.state.players).map(playerId =>
+          <div class="player">
+            [{playerId}, {this.state.players[playerId].x} {this.state.players[playerId].y}]
+          </div>
+        )}
       </Frame>
     </div>
     );
   }
 
   initializeGame(room) {
-    var colors = ['red', 'green', 'yellow', 'blue', 'cyan', 'magenta'];
-
     // listen to patches coming from the server
     room.state.players.onAdd = (player, sessionId) => {
-      var dom = document.createElement("div");
-      dom.className = "player";
-      dom.style.left = player.x + "px";
-      dom.style.top = player.y + "px";
-      dom.style.background = colors[Math.floor(Math.random() * colors.length)];
-      dom.innerHTML = "Player " + sessionId;
-
-      this.players[sessionId] = dom;
-      document.body.appendChild(dom);
-    }
+      const newPlayers = this.state.players;
+      newPlayers[sessionId] = player;
+      this.setState({ players: newPlayers });
+    };
 
     room.state.players.onRemove = (player, sessionId) => {
-      document.body.removeChild(this.players[sessionId]);
-      delete this.players[sessionId];
-    }
+      const newPlayers = this.state.players;
+      delete newPlayers[sessionId];
+      this.setState({ players: newPlayers });
+    };
 
     room.state.players.onChange = (player, sessionId) => {
-      var dom = this.players[sessionId];
-      dom.style.left = player.x + "px";
-      dom.style.top = player.y + "px";
-    }
+      const newPlayers = this.state.players;
+      newPlayers[sessionId] = player;
+      this.setState({ players: newPlayers });
+    };
 
     window.addEventListener("keydown", function (e) {
       switch (e.which) {

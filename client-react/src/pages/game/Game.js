@@ -28,26 +28,19 @@ class Game extends React.Component {
   }
 
   initializeGame(room) {
-    // listen to patches coming from the server
-    room.state.players.onAdd = (player, sessionId) => {
+    const updateUserState = (player, sessionId) => {
       const newPlayers = this.state.players;
       newPlayers[sessionId] = player;
       this.setState({ players: newPlayers });
     };
-
-    room.state.players.onRemove = (player, sessionId) => {
+    room.state.players.onAdd = updateUserState;
+    room.state.players.onChange = updateUserState;
+    room.state.players.onRemove = (_, sessionId) => {
       const newPlayers = this.state.players;
       delete newPlayers[sessionId];
       this.setState({ players: newPlayers });
     };
-
-    room.state.players.onChange = (player, sessionId) => {
-      const newPlayers = this.state.players;
-      newPlayers[sessionId] = player;
-      this.setState({ players: newPlayers });
-    };
-
-    window.addEventListener("keydown", function (e) {
+    window.addEventListener('keydown', function (e) {
       switch (e.which) {
         case 38: room.send({ position: 'up' }); break;
         case 39: room.send({ position: 'right' }); break;

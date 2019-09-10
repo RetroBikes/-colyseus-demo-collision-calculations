@@ -8,6 +8,7 @@ class Game extends React.Component {
     super();
     const client = new Colyseus.Client('ws://localhost:2567');
     client.joinOrCreate('my_room').then(room => this.initializeGame(room));
+    this.players = {};
   }
 
   render () {
@@ -20,11 +21,10 @@ class Game extends React.Component {
   }
 
   initializeGame(room) {
-    var players = {};
     var colors = ['red', 'green', 'yellow', 'blue', 'cyan', 'magenta'];
 
     // listen to patches coming from the server
-    room.state.players.onAdd = function (player, sessionId) {
+    room.state.players.onAdd = (player, sessionId) => {
       var dom = document.createElement("div");
       dom.className = "player";
       dom.style.left = player.x + "px";
@@ -32,17 +32,17 @@ class Game extends React.Component {
       dom.style.background = colors[Math.floor(Math.random() * colors.length)];
       dom.innerHTML = "Player " + sessionId;
 
-      players[sessionId] = dom;
+      this.players[sessionId] = dom;
       document.body.appendChild(dom);
     }
 
-    room.state.players.onRemove = function (player, sessionId) {
-      document.body.removeChild(players[sessionId]);
-      delete players[sessionId];
+    room.state.players.onRemove = (player, sessionId) => {
+      document.body.removeChild(this.players[sessionId]);
+      delete this.players[sessionId];
     }
 
-    room.state.players.onChange = function (player, sessionId) {
-      var dom = players[sessionId];
+    room.state.players.onChange = (player, sessionId) => {
+      var dom = this.players[sessionId];
       dom.style.left = player.x + "px";
       dom.style.top = player.y + "px";
     }

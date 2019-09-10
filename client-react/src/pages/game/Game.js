@@ -18,8 +18,8 @@ class Game extends React.Component {
       <div class="game">
       <Frame animate={true} level={3} corners={4} layer='primary' classes="game-frame">
         {Object.keys(this.state.players).map(playerId =>
-          <div class="player">
-            [{playerId}, {this.state.players[playerId].x} {this.state.players[playerId].y}]
+          <div class="player" style={this.state.players[playerId]}>
+            [{playerId}]
           </div>
         )}
       </Frame>
@@ -30,7 +30,10 @@ class Game extends React.Component {
   initializeGame(room) {
     const updateUserState = (player, sessionId) => {
       const newPlayers = this.state.players;
-      newPlayers[sessionId] = player;
+      newPlayers[sessionId] = {
+        left: `${player.x}px`,
+        top: `${player.y}px`,
+      };
       this.setState({ players: newPlayers });
     };
     room.state.players.onAdd = updateUserState;

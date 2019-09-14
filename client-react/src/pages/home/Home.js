@@ -1,10 +1,11 @@
 import React from 'react';
-import { Frame, Button, Heading, Link } from 'arwes';
-import './home.css';
+import { Frame, Button, Heading, Link, createTheme } from 'arwes';
 import { Stage, Layer, Line } from 'react-konva';
+import './home.css';
 
 class Home extends React.Component {
   render () {
+    const theme = createTheme();
     return (
       <div class="home">
         <div class="home-inner">
@@ -14,12 +15,12 @@ class Home extends React.Component {
               <Layer>
                 <Line
                   points={[20, 10, 20, 60, 40, 60, 40, 40, 70, 40, 70, 25, 40, 25, 40, 10, 80, 10]}
-                  stroke="pink"
+                  stroke={theme.color.primary.dark}
                   strokeWidth={5}
                 />
                 <Line
-                  points={[80, 80, 80, 50, 50, 50, 50, 80, 10, 80, 10, 10, 30, 10 ]}
-                  stroke="blue"
+                  points={[80, 80, 80, 50, 50, 50, 50, 75, 10, 75, 10, 10, 30, 10 ]}
+                  stroke={theme.color.secondary.base}
                   strokeWidth={5}
                 />
               </Layer>

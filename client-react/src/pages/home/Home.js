@@ -1,7 +1,7 @@
 import React from 'react';
 import { Frame, Button, Heading, Link } from 'arwes';
 import './home.css';
-import { Stage, Layer, Rect } from 'react-konva';
+import { Stage, Layer, Line } from 'react-konva';
 
 class Home extends React.Component {
   render () {
@@ -9,15 +9,18 @@ class Home extends React.Component {
       <div class="home">
         <div class="home-inner">
           <Frame animate={true} level={3} corners={4} layer='primary' classes="game-frame"
-            style={{height: '100px', margin: '0 auto 15px', width: '100px'}}>
+            style={{height: '90px', margin: '0 auto 15px', width: '90px'}}>
             <Stage width={window.innerWidth} height="100">
               <Layer>
-                <Rect
-                  x={20} y={20}
-                  width={50}
-                  height={50}
-                  fill="#ffffff"
-                  shadowBlur={5}
+                <Line
+                  points={[20, 10, 20, 60, 40, 60, 40, 40, 70, 40, 70, 25, 40, 25, 40, 10, 80, 10]}
+                  stroke="pink"
+                  strokeWidth={5}
+                />
+                <Line
+                  points={[80, 80, 80, 50, 50, 50, 50, 80, 10, 80, 10, 10, 30, 10 ]}
+                  stroke="blue"
+                  strokeWidth={5}
                 />
               </Layer>
             </Stage>

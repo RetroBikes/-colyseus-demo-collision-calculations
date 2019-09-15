@@ -26,8 +26,8 @@ class Home extends React.Component {
               </Layer>
             </Stage>
           </Frame>
-          <Heading node='h1'>React Colyseus Demo I</Heading>
-          <Heading node='h2'>Basic movements</Heading>
+          <Heading node='h1'>React Colyseus Demo II</Heading>
+          <Heading node='h2'>Drawing the bikes</Heading>
           <Button animate layer='alert'>
             <Link href="/game">Start demo</Link>
           </Button>

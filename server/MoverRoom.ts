@@ -21,6 +21,19 @@ export class Player extends Schema {
 
     @type("string")
     public position = 'right';
+
+    public constructor() {
+        super();
+        this.addPlayerPart(
+            Math.floor(Math.random() * 400),
+            Math.floor(Math.random() * 400),
+        );
+    }
+
+    public addPlayerPart(x: number, y: number): void {
+        const newPlayerPart = new PlayerPart(x, y);
+        this.playerParts.push(newPlayerPart);
+    }
 }
 
 export class State extends Schema {
@@ -49,7 +62,7 @@ export class State extends Schema {
 
     makeGameStep() {
         for (let playerId of this.getAllPlayerIds()) {
-            this.movePlayer(playerId)
+            this.movePlayer(playerId);
         }
     }
 

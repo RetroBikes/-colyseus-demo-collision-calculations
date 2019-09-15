@@ -38,6 +38,10 @@ export class Player extends Schema {
         this.playerParts[this.playerSize] = newPlayerPart;
         this.playerSize++;
     }
+
+    public getCurrentPart(): PlayerPart {
+        return this.playerParts[this.playerSize - 1];
+    }
 }
 
 export class State extends Schema {
@@ -71,20 +75,22 @@ export class State extends Schema {
     }
 
     movePlayer (id: string) {
-        switch(this.players[ id ].position) {
+        const currentPlayerPart = this.players[id].getCurrentPart();
+        switch(this.players[id].position) {
             case 'up':
-                this.players[ id ].y -= 10;
+                currentPlayerPart.y -= 10;
                 break;
             case 'down':
-                this.players[ id ].y += 10;
+                currentPlayerPart.y += 10;
                 break;
             case 'left':
-                this.players[ id ].x -= 10;
+                currentPlayerPart.x -= 10;
                 break;
             case 'right':
-                this.players[ id ].x += 10;
+                currentPlayerPart.x += 10;
                 break;
         }
+        this.players[id].addPlayerPart(currentPlayerPart.x, currentPlayerPart.y);
     }
 }
 

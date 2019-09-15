@@ -1,15 +1,47 @@
 import { Room, Client } from "colyseus";
 import { Schema, type, MapSchema } from "@colyseus/schema";
 
+export class PlayerPart extends Schema {
+    @type("number")
+    public x: number;
+
+    @type("number")
+    public y: number;
+
+    public constructor(x: number, y: number) {
+        super();
+        this.x = x;
+        this.y = y;
+    }
+}
+
 export class Player extends Schema {
-    @type("number")
-    x = Math.floor(Math.random() * 400);
+    @type({ map: PlayerPart })
+    public playerParts = new MapSchema<PlayerPart>();
 
-    @type("number")
-    y = Math.floor(Math.random() * 400);
+    @type('string')
+    public position = 'right';
 
-    @type("string")
-    position = "right";
+    @type('number')
+    public playerSize = 0;
+
+    public constructor() {
+        super();
+        this.addPlayerPart(
+            Math.floor(Math.random() * 400),
+            Math.floor(Math.random() * 400),
+        );
+    }
+
+    public addPlayerPart(x: number, y: number): void {
+        const newPlayerPart = new PlayerPart(x, y);
+        this.playerParts[this.playerSize] = newPlayerPart;
+        this.playerSize++;
+    }
+
+    public getCurrentPart(): PlayerPart {
+        return this.playerParts[this.playerSize - 1];
+    }
 }
 
 export class State extends Schema {
@@ -38,25 +70,27 @@ export class State extends Schema {
 
     makeGameStep() {
         for (let playerId of this.getAllPlayerIds()) {
-            this.movePlayer(playerId)
+            this.movePlayer(playerId);
         }
     }
 
     movePlayer (id: string) {
-        switch(this.players[ id ].position) {
+        const currentPlayerPart = this.players[id].getCurrentPart();
+        switch(this.players[id].position) {
             case 'up':
-                this.players[ id ].y -= 10;
+                currentPlayerPart.y -= 10;
                 break;
             case 'down':
-                    this.players[ id ].y += 10;
+                currentPlayerPart.y += 10;
                 break;
             case 'left':
-                    this.players[ id ].x -= 10;
+                currentPlayerPart.x -= 10;
                 break;
             case 'right':
-                    this.players[ id ].x += 10;
+                currentPlayerPart.x += 10;
                 break;
         }
+        this.players[id].addPlayerPart(currentPlayerPart.x, currentPlayerPart.y);
     }
 }
 

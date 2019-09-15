@@ -1,7 +1,8 @@
 import React from 'react';
 import { Frame } from 'arwes';
-import './game.css';
 import * as Colyseus from 'colyseus.js';
+import { Stage, Layer, Rect } from 'react-konva';
+import './game.css';
 
 class Game extends React.Component {
   constructor() {
@@ -17,11 +18,19 @@ class Game extends React.Component {
     return (
       <div class="game">
       <Frame animate={true} level={3} corners={4} layer='primary' classes="game-frame">
-        {Object.keys(this.state.players).map(playerId =>
-          <div class="player" style={this.state.players[playerId]}>
-            [{playerId}]
-          </div>
-        )}
+        <Stage width={window.innerWidth - 60} height={window.innerHeight - 60}>
+          <Layer>
+            {Object.keys(this.state.players).map(playerId =>
+              <Rect
+                x={this.state.players[playerId].x}
+                y={this.state.players[playerId].y}
+                width={50}
+                height={50}
+                fill="blue"
+              />
+            )}
+          </Layer>
+        </Stage>
       </Frame>
     </div>
     );
@@ -31,8 +40,8 @@ class Game extends React.Component {
     const updateUserState = (player, sessionId) => {
       const newPlayers = this.state.players;
       newPlayers[sessionId] = {
-        left: `${player.x}px`,
-        top: `${player.y}px`,
+        x: player.x,
+        y: player.y,
       };
       this.setState({ players: newPlayers });
     };

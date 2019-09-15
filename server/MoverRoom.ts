@@ -19,8 +19,11 @@ export class Player extends Schema {
     @type({ map: PlayerPart })
     public playerParts = new MapSchema<PlayerPart>();
 
-    @type("string")
+    @type('string')
     public position = 'right';
+
+    @type('number')
+    public playerSize = 0;
 
     public constructor() {
         super();
@@ -32,7 +35,8 @@ export class Player extends Schema {
 
     public addPlayerPart(x: number, y: number): void {
         const newPlayerPart = new PlayerPart(x, y);
-        this.playerParts.push(newPlayerPart);
+        this.playerParts[this.playerSize] = newPlayerPart;
+        this.playerSize++;
     }
 }
 

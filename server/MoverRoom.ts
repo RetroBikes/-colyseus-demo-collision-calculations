@@ -1,15 +1,26 @@
 import { Room, Client } from "colyseus";
 import { Schema, type, MapSchema } from "@colyseus/schema";
 
-export class Player extends Schema {
+export class PlayerPart extends Schema {
     @type("number")
-    x = Math.floor(Math.random() * 400);
+    public x: number;
 
     @type("number")
-    y = Math.floor(Math.random() * 400);
+    public y: number;
+
+    public constructor(x: number, y: number) {
+        super();
+        this.x = x;
+        this.y = y;
+    }
+}
+
+export class Player extends Schema {
+    @type({ map: PlayerPart })
+    public playerParts = new MapSchema<PlayerPart>();
 
     @type("string")
-    position = "right";
+    public position = 'right';
 }
 
 export class State extends Schema {
@@ -48,13 +59,13 @@ export class State extends Schema {
                 this.players[ id ].y -= 10;
                 break;
             case 'down':
-                    this.players[ id ].y += 10;
+                this.players[ id ].y += 10;
                 break;
             case 'left':
-                    this.players[ id ].x -= 10;
+                this.players[ id ].x -= 10;
                 break;
             case 'right':
-                    this.players[ id ].x += 10;
+                this.players[ id ].x += 10;
                 break;
         }
     }

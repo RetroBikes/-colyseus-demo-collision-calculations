@@ -1,7 +1,7 @@
 import React from 'react';
-import { Frame } from 'arwes';
+import { Frame, createTheme } from 'arwes';
 import * as Colyseus from 'colyseus.js';
-import { Stage, Layer, Rect } from 'react-konva';
+import { Stage, Layer, Line } from 'react-konva';
 import './game.css';
 
 class Game extends React.Component {
@@ -15,18 +15,17 @@ class Game extends React.Component {
   }
 
   render () {
+    const theme = createTheme();
     return (
       <div class="game">
       <Frame animate={true} level={3} corners={4} layer='primary' classes="game-frame">
         <Stage width={window.innerWidth - 60} height={window.innerHeight - 60}>
           <Layer>
             {Object.keys(this.state.players).map(playerId =>
-              <Rect
-                x={this.state.players[playerId].x}
-                y={this.state.players[playerId].y}
-                width={50}
-                height={50}
-                fill="blue"
+              <Line
+                points={this.state.players[playerId].parts}
+                stroke={theme.color.primary.dark}
+                strokeWidth={5}
               />
             )}
           </Layer>
@@ -38,11 +37,15 @@ class Game extends React.Component {
 
   initializeGame(room) {
     const updateUserState = (player, sessionId) => {
-      const newPlayers = this.state.players;
-      newPlayers[sessionId] = {
-        x: player.x,
-        y: player.y,
-      };
+      const newPlayers = this.state.players,
+        currentPlayerPart = player.playerParts[player.playerSize - 1];
+      if ('undefined' === typeof newPlayers[sessionId]) {
+        newPlayers[sessionId] = {
+          parts: []
+        };
+      }
+      newPlayers[sessionId].parts.push(currentPlayerPart.x);
+      newPlayers[sessionId].parts.push(currentPlayerPart.y);
       this.setState({ players: newPlayers });
     };
     room.state.players.onAdd = updateUserState;

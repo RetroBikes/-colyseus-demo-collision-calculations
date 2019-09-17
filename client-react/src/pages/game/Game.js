@@ -25,7 +25,7 @@ class Game extends React.Component {
               <Line
                 points={this.state.players[playerId].parts}
                 stroke={theme.color.primary.dark}
-                strokeWidth={5}
+                strokeWidth={7.5}
               />
             )}
           </Layer>
@@ -39,13 +39,16 @@ class Game extends React.Component {
     const updateUserState = (player, sessionId) => {
       const newPlayers = this.state.players,
         currentPlayerPart = player.playerParts[player.playerSize - 1];
-      if ('undefined' === typeof newPlayers[sessionId]) {
-        newPlayers[sessionId] = {
-          parts: []
-        };
+      let existingPLayerParts = [];
+      if ('undefined' !== typeof newPlayers[sessionId]) {
+        existingPLayerParts = newPlayers[sessionId].parts;
       }
-      newPlayers[sessionId].parts.push(currentPlayerPart.x);
-      newPlayers[sessionId].parts.push(currentPlayerPart.y);
+      existingPLayerParts.push(currentPlayerPart.x);
+      existingPLayerParts.push(currentPlayerPart.y);
+      delete newPlayers[sessionId];
+      newPlayers[sessionId] = {
+        parts: existingPLayerParts,
+      };
       this.setState({ players: newPlayers });
     };
     room.state.players.onAdd = updateUserState;

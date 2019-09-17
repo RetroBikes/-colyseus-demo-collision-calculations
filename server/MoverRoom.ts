@@ -104,7 +104,7 @@ export class MoverRoom extends Room<State> {
 
         this.setSimulationInterval(() => {
             this.state.makeGameStep();
-        });
+        }, 100);
     }
 
     onJoin (client: Client) {

@@ -20,7 +20,7 @@ export class Player extends Schema {
     public playerParts = new MapSchema<PlayerPart>();
 
     @type('string')
-    public position = 'right';
+    public direction = 'right';
 
     @type('number')
     public playerSize = 0;
@@ -56,8 +56,8 @@ export class State extends Schema {
         this.players[ id ] = new Player();
     }
 
-    changePosition (id: string, position: string) {
-        this.players[ id ].position = position;
+    changeDirection (id: string, direction: string) {
+        this.players[ id ].direction = direction;
     }
 
     removePlayer (id: string) {
@@ -76,7 +76,7 @@ export class State extends Schema {
 
     movePlayer (id: string) {
         const currentPlayerPart = this.players[id].getCurrentPart();
-        switch(this.players[id].position) {
+        switch(this.players[id].direction) {
             case 'up':
                 currentPlayerPart.y -= 10;
                 break;
@@ -117,7 +117,7 @@ export class MoverRoom extends Room<State> {
 
     onMessage (client: Client, data: any) {
         console.log("StateHandlerRoom received message from", client.sessionId, ":", data);
-        this.state.changePosition(client.sessionId, data.position);
+        this.state.changeDirection(client.sessionId, data.direction);
     }
 
     onDispose () {

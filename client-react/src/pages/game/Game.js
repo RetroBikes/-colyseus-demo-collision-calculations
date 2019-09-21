@@ -60,10 +60,10 @@ class Game extends React.Component {
     };
     window.addEventListener('keydown', function (e) {
       switch (e.which) {
-        case 38: room.send({ position: 'up' }); break;
-        case 39: room.send({ position: 'right' }); break;
-        case 40: room.send({ position: 'down' }); break;
-        case 37: room.send({ position: 'left' }); break;
+        case 38: room.send({ direction: 'up' }); break;
+        case 39: room.send({ direction: 'right' }); break;
+        case 40: room.send({ direction: 'down' }); break;
+        case 37: room.send({ direction: 'left' }); break;
       }
     });
   }

@@ -38,7 +38,7 @@ class Game extends React.Component {
   initializeGame(room) {
     const updateUserState = (player, sessionId) => {
       const newPlayers = this.state.players,
-        currentPlayerPart = player.playerParts[player.playerSize - 1];
+        currentPlayerPart = player.currentPlayerPosition;
       let existingPLayerParts = [];
       if ('undefined' !== typeof newPlayers[sessionId]) {
         existingPLayerParts = newPlayers[sessionId].parts;

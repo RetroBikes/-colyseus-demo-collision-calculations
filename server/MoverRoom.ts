@@ -1,7 +1,7 @@
 import { Room, Client } from "colyseus";
 import { Schema, type, MapSchema } from "@colyseus/schema";
 
-export class PlayerPart extends Schema {
+export class Coordinate extends Schema {
     @type("number")
     public x: number;
 
@@ -16,13 +16,14 @@ export class PlayerPart extends Schema {
 }
 
 export class Player extends Schema {
-    @type({ map: PlayerPart })
-    public playerParts = new MapSchema<PlayerPart>();
+    @type(Coordinate)
+    public currentPlayerPosition: Coordinate = new Coordinate(0, 0);
 
     @type('string')
     public direction = 'right';
 
-    @type('number')
+    public playerParts = new MapSchema<Coordinate>();
+
     public playerSize = 0;
 
     public constructor() {
@@ -34,13 +35,10 @@ export class Player extends Schema {
     }
 
     public addPlayerPart(x: number, y: number): void {
-        const newPlayerPart = new PlayerPart(x, y);
+        const newPlayerPart = new Coordinate(x, y);
         this.playerParts[this.playerSize] = newPlayerPart;
+        this.currentPlayerPosition = newPlayerPart;
         this.playerSize++;
-    }
-
-    public getCurrentPart(): PlayerPart {
-        return this.playerParts[this.playerSize - 1];
     }
 }
 
@@ -75,7 +73,7 @@ export class State extends Schema {
     }
 
     movePlayer (id: string) {
-        const currentPlayerPart = this.players[id].getCurrentPart();
+        const currentPlayerPart = this.players[id].currentPlayerPosition;
         switch(this.players[id].direction) {
             case 'up':
                 currentPlayerPart.y -= 10;

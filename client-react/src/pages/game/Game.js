@@ -1,7 +1,7 @@
 import React from 'react';
-import { Frame } from 'arwes';
+import { Frame, createTheme } from 'arwes';
 import * as Colyseus from 'colyseus.js';
-import { Stage, Layer, Rect } from 'react-konva';
+import { Stage, Layer, Line } from 'react-konva';
 import './game.css';
 
 class Game extends React.Component {
@@ -15,18 +15,17 @@ class Game extends React.Component {
   }
 
   render () {
+    const theme = createTheme();
     return (
       <div class="game">
       <Frame animate={true} level={3} corners={4} layer='primary' classes="game-frame">
         <Stage width={window.innerWidth - 60} height={window.innerHeight - 60}>
           <Layer>
             {Object.keys(this.state.players).map(playerId =>
-              <Rect
-                x={this.state.players[playerId].x}
-                y={this.state.players[playerId].y}
-                width={50}
-                height={50}
-                fill="blue"
+              <Line
+                points={this.state.players[playerId].parts}
+                stroke={theme.color.primary.dark}
+                strokeWidth={7.5}
               />
             )}
           </Layer>
@@ -38,10 +37,17 @@ class Game extends React.Component {
 
   initializeGame(room) {
     const updateUserState = (player, sessionId) => {
-      const newPlayers = this.state.players;
+      const newPlayers = this.state.players,
+        currentPlayerPart = player.currentPlayerPosition;
+      let existingPLayerParts = [];
+      if ('undefined' !== typeof newPlayers[sessionId]) {
+        existingPLayerParts = newPlayers[sessionId].parts;
+      }
+      existingPLayerParts.push(currentPlayerPart.x);
+      existingPLayerParts.push(currentPlayerPart.y);
+      delete newPlayers[sessionId];
       newPlayers[sessionId] = {
-        x: player.x,
-        y: player.y,
+        parts: existingPLayerParts,
       };
       this.setState({ players: newPlayers });
     };
@@ -54,10 +60,10 @@ class Game extends React.Component {
     };
     window.addEventListener('keydown', function (e) {
       switch (e.which) {
-        case 38: room.send({ position: 'up' }); break;
-        case 39: room.send({ position: 'right' }); break;
-        case 40: room.send({ position: 'down' }); break;
-        case 37: room.send({ position: 'left' }); break;
+        case 38: room.send({ direction: 'up' }); break;
+        case 39: room.send({ direction: 'right' }); break;
+        case 40: room.send({ direction: 'down' }); break;
+        case 37: room.send({ direction: 'left' }); break;
       }
     });
   }

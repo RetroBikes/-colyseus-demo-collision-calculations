@@ -46,10 +46,6 @@ export class State extends Schema {
     @type({ map: Player })
     players = new MapSchema<Player>();
 
-    gameLoop: any;
-
-    something = "This attribute won't be sent to the client-side";
-
     createPlayer (id: string) {
         this.players[ id ] = new Player();
     }
@@ -76,16 +72,16 @@ export class State extends Schema {
         const currentPlayerPart = this.players[id].currentPlayerPosition;
         switch(this.players[id].direction) {
             case 'up':
-                currentPlayerPart.y -= 10;
+                currentPlayerPart.y -= 1;
                 break;
             case 'down':
-                currentPlayerPart.y += 10;
+                currentPlayerPart.y += 1;
                 break;
             case 'left':
-                currentPlayerPart.x -= 10;
+                currentPlayerPart.x -= 1;
                 break;
             case 'right':
-                currentPlayerPart.x += 10;
+                currentPlayerPart.x += 1;
                 break;
         }
         this.players[id].addPlayerPart(currentPlayerPart.x, currentPlayerPart.y);

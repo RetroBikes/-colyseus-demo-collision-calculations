@@ -40,31 +40,43 @@ class Game extends React.Component {
 
   initializeGame(room) {
     const updateUserState = (player, sessionId) => {
-      const newPlayers = this.state.players,
-        currentPlayerPart = player.currentPlayerPosition;
+      // Calculate the step size based on physical game area
+      // size and the game virtual size setted on server.
       this.setState({
         areaVirtualSize: room.state.areaVirtualSize,
         stepSize: this.state.areaPhysicalSize / room.state.areaVirtualSize,
       });
-      let existingPLayerParts = [];
+
+      // Get the players data and the current player position.
+      const newPlayers = this.state.players,
+        currentPlayerPart = player.currentPlayerPosition;
+      let existingPlayerParts = [];
+
+      // Take the player parts, if already exists.
       if ('undefined' !== typeof newPlayers[sessionId]) {
-        existingPLayerParts = newPlayers[sessionId].parts;
+        existingPlayerParts = newPlayers[sessionId].parts;
       }
-      existingPLayerParts.push(currentPlayerPart.x * this.state.stepSize);
-      existingPLayerParts.push(currentPlayerPart.y * this.state.stepSize);
+
+      // Calculate the true position of the player new step based on stepSize setted above.
+      existingPlayerParts.push(currentPlayerPart.x * this.state.stepSize);
+      existingPlayerParts.push(currentPlayerPart.y * this.state.stepSize);
+
+      // Update players list (and update game state on canvas automagically).
       delete newPlayers[sessionId];
       newPlayers[sessionId] = {
-        parts: existingPLayerParts,
+        parts: existingPlayerParts,
       };
       this.setState({ players: newPlayers });
     };
     room.state.players.onAdd = updateUserState;
     room.state.players.onChange = updateUserState;
+
     room.state.players.onRemove = (_, sessionId) => {
       const newPlayers = this.state.players;
       delete newPlayers[sessionId];
       this.setState({ players: newPlayers });
     };
+
     window.addEventListener('keydown', function (e) {
       switch (e.which) {
         case 38: room.send({ direction: 'up' }); break;

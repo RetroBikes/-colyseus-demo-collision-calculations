@@ -13,6 +13,7 @@ class Game extends React.Component {
       areaPhysicalSize: window.innerHeight - 60,
       areaVirtualSize: 0,
       stepSize: 0,
+      direction: '',
       players: {},
     };
   }
@@ -45,6 +46,7 @@ class Game extends React.Component {
       this.setState({
         areaVirtualSize: room.state.areaVirtualSize,
         stepSize: this.state.areaPhysicalSize / room.state.areaVirtualSize,
+        direction: player.direction,
       });
 
       // Get the players data and the current player position.
@@ -77,13 +79,25 @@ class Game extends React.Component {
       this.setState({ players: newPlayers });
     };
 
-    window.addEventListener('keydown', function (e) {
-      switch (e.which) {
-        case 38: room.send({ direction: 'up' }); break;
-        case 39: room.send({ direction: 'right' }); break;
-        case 40: room.send({ direction: 'down' }); break;
-        case 37: room.send({ direction: 'left' }); break;
+    window.addEventListener('keydown', event => {
+      let direction = '';
+      switch (event.which) {
+        case 38: direction = 'up'; break;
+        case 39: direction = 'right'; break;
+        case 40: direction = 'down'; break;
+        case 37: direction = 'left'; break;
       }
+      const oppositeSides = {
+        'up': 'down',
+        'down': 'up',
+        'right': 'left',
+        'left': 'right',
+      };
+      console.log(oppositeSides[direction], this.state.direction, oppositeSides[direction] === this.state.direction);
+      if (oppositeSides[direction] === this.state.direction) {
+        return;
+      }
+      room.send({ direction: direction });
     });
   }
 }

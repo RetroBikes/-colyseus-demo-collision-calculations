@@ -29,8 +29,8 @@ export class Player extends Schema {
     public constructor() {
         super();
         this.addPlayerPart(
-            Math.floor(Math.random() * 400),
-            Math.floor(Math.random() * 400),
+            Math.floor(10),
+            Math.floor(10),
         );
     }
 
@@ -45,6 +45,9 @@ export class Player extends Schema {
 export class State extends Schema {
     @type({ map: Player })
     players = new MapSchema<Player>();
+
+    @type('number')
+    areaVirtualSize = 150;
 
     createPlayer (id: string) {
         this.players[ id ] = new Player();

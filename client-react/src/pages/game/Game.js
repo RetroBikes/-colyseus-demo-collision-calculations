@@ -10,6 +10,9 @@ class Game extends React.Component {
     const client = new Colyseus.Client('ws://localhost:2567');
     client.joinOrCreate('my_room').then(room => this.initializeGame(room));
     this.state = {
+      areaPhysicalSize: window.innerHeight - 60,
+      areaVirtualSize: 0,
+      stepSize: 0,
       players: {},
     };
   }
@@ -19,13 +22,13 @@ class Game extends React.Component {
     return (
       <div class="game">
       <Frame animate={true} level={3} corners={4} layer='primary' classes="game-frame">
-        <Stage width={window.innerHeight - 60} height={window.innerHeight - 60}>
+        <Stage width={this.state.areaPhysicalSize} height={this.state.areaPhysicalSize}>
           <Layer>
             {Object.keys(this.state.players).map(playerId =>
               <Line
                 points={this.state.players[playerId].parts}
                 stroke={theme.color.primary.dark}
-                strokeWidth={7.5}
+                strokeWidth={this.state.stepSize}
               />
             )}
           </Layer>
@@ -39,12 +42,16 @@ class Game extends React.Component {
     const updateUserState = (player, sessionId) => {
       const newPlayers = this.state.players,
         currentPlayerPart = player.currentPlayerPosition;
+      this.setState({
+        areaVirtualSize: room.state.areaVirtualSize,
+        stepSize: this.state.areaPhysicalSize / room.state.areaVirtualSize,
+      });
       let existingPLayerParts = [];
       if ('undefined' !== typeof newPlayers[sessionId]) {
         existingPLayerParts = newPlayers[sessionId].parts;
       }
-      existingPLayerParts.push(currentPlayerPart.x);
-      existingPLayerParts.push(currentPlayerPart.y);
+      existingPLayerParts.push(currentPlayerPart.x * this.state.stepSize);
+      existingPLayerParts.push(currentPlayerPart.y * this.state.stepSize);
       delete newPlayers[sessionId];
       newPlayers[sessionId] = {
         parts: existingPLayerParts,

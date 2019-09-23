@@ -19,7 +19,7 @@ class Game extends React.Component {
     return (
       <div class="game">
       <Frame animate={true} level={3} corners={4} layer='primary' classes="game-frame">
-        <Stage width={window.innerWidth - 60} height={window.innerHeight - 60}>
+        <Stage width={window.innerHeight - 60} height={window.innerHeight - 60}>
           <Layer>
             {Object.keys(this.state.players).map(playerId =>
               <Line

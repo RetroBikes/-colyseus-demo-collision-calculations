@@ -1,6 +1,8 @@
 .game {
   height: 100vh;
+  margin: 0 auto;
   padding: 30px;
+  width: 100vh;
 }
 
 .game > div,

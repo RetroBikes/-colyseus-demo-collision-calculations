@@ -26,12 +26,13 @@ export class Player extends Schema {
 
     public playerSize = 0;
 
-    public constructor() {
+    public constructor(startPositionX: number, startPositionY: number, initialDirection = 'right') {
         super();
         this.addPlayerPart(
-            Math.floor(10),
-            Math.floor(10),
+            startPositionX,
+            startPositionY,
         );
+        this.direction = initialDirection;
     }
 
     public addPlayerPart(x: number, y: number): void {
@@ -49,8 +50,17 @@ export class State extends Schema {
     @type('number')
     areaVirtualSize = 150;
 
+    waitingForPlayerTwo = true;
+
     createPlayer (id: string) {
-        this.players[ id ] = new Player();
+        const startCoordinate = this.waitingForPlayerTwo ?
+            new Coordinate(10, 10) :
+            new Coordinate(this.areaVirtualSize - 10, this.areaVirtualSize - 10);
+        this.players[ id ] = new Player(
+            startCoordinate.x, startCoordinate.y,
+            this.waitingForPlayerTwo ? 'right' : 'left'
+        );
+        this.waitingForPlayerTwo = false;
     }
 
     changeDirection (id: string, direction: string) {

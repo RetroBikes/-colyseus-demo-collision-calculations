@@ -29,8 +29,8 @@ export class Player extends Schema {
     public constructor() {
         super();
         this.addPlayerPart(
-            Math.floor(Math.random() * 400),
-            Math.floor(Math.random() * 400),
+            Math.floor(10),
+            Math.floor(10),
         );
     }
 
@@ -46,9 +46,8 @@ export class State extends Schema {
     @type({ map: Player })
     players = new MapSchema<Player>();
 
-    gameLoop: any;
-
-    something = "This attribute won't be sent to the client-side";
+    @type('number')
+    areaVirtualSize = 150;
 
     createPlayer (id: string) {
         this.players[ id ] = new Player();
@@ -76,16 +75,16 @@ export class State extends Schema {
         const currentPlayerPart = this.players[id].currentPlayerPosition;
         switch(this.players[id].direction) {
             case 'up':
-                currentPlayerPart.y -= 10;
+                currentPlayerPart.y -= 1;
                 break;
             case 'down':
-                currentPlayerPart.y += 10;
+                currentPlayerPart.y += 1;
                 break;
             case 'left':
-                currentPlayerPart.x -= 10;
+                currentPlayerPart.x -= 1;
                 break;
             case 'right':
-                currentPlayerPart.x += 10;
+                currentPlayerPart.x += 1;
                 break;
         }
         this.players[id].addPlayerPart(currentPlayerPart.x, currentPlayerPart.y);
@@ -93,7 +92,7 @@ export class State extends Schema {
 }
 
 export class MoverRoom extends Room<State> {
-    maxClients = 4;
+    maxClients = 2;
 
     onCreate (options: any) {
         console.log("StateHandlerRoom created!", options);

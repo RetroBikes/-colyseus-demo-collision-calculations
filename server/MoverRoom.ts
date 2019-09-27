@@ -104,18 +104,22 @@ export class State extends Schema {
 export class MoverRoom extends Room<State> {
     maxClients = 2;
 
+    waitingForPlayerTwo = true;
+
     onCreate (options: any) {
         console.log("StateHandlerRoom created!", options);
 
         this.setState(new State());
-
-        this.setSimulationInterval(() => {
-            this.state.makeGameStep();
-        }, 100);
     }
 
     onJoin (client: Client) {
         this.state.createPlayer(client.sessionId);
+        if (! this.waitingForPlayerTwo) {
+            this.setSimulationInterval(() => {
+                this.state.makeGameStep();
+            }, 100);
+        }
+        this.waitingForPlayerTwo = false;
     }
 
     onLeave (client: Client) {

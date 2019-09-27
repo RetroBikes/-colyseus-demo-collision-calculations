@@ -52,15 +52,14 @@ export class State extends Schema {
 
     waitingForPlayerTwo = true;
 
-    createPlayer (id: string) {
-        const startCoordinate = this.waitingForPlayerTwo ?
+    createPlayer (id: string, isPlayerOne: boolean) {
+        const startCoordinate = isPlayerOne ?
             new Coordinate(10, 10) :
             new Coordinate(this.areaVirtualSize - 10, this.areaVirtualSize - 10);
         this.players[ id ] = new Player(
             startCoordinate.x, startCoordinate.y,
-            this.waitingForPlayerTwo ? 'right' : 'left'
+            isPlayerOne ? 'right' : 'left'
         );
-        this.waitingForPlayerTwo = false;
     }
 
     changeDirection (id: string, direction: string) {
@@ -113,7 +112,7 @@ export class MoverRoom extends Room<State> {
     }
 
     onJoin (client: Client) {
-        this.state.createPlayer(client.sessionId);
+        this.state.createPlayer(client.sessionId, this.waitingForPlayerTwo);
         if (! this.waitingForPlayerTwo) {
             this.startGame();
         }

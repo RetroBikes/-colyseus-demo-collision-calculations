@@ -115,11 +115,15 @@ export class MoverRoom extends Room<State> {
     onJoin (client: Client) {
         this.state.createPlayer(client.sessionId);
         if (! this.waitingForPlayerTwo) {
-            this.setSimulationInterval(() => {
-                this.state.makeGameStep();
-            }, 100);
+            this.startGame();
         }
         this.waitingForPlayerTwo = false;
+    }
+
+    startGame() {
+        this.setSimulationInterval(() => {
+            this.state.makeGameStep();
+        }, 100);
     }
 
     onLeave (client: Client) {

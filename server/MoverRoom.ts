@@ -22,9 +22,9 @@ export class Player extends Schema {
     @type('string')
     public direction = 'right';
 
-    public playerParts = new MapSchema<Coordinate>();
+    private playerParts = new MapSchema<Coordinate>();
 
-    public playerSize = 0;
+    private playerSize = 0;
 
     public constructor(startPositionX: number, startPositionY: number, initialDirection = 'right') {
         super();
@@ -68,14 +68,12 @@ export class Player extends Schema {
 
 export class State extends Schema {
     @type({ map: Player })
-    players = new MapSchema<Player>();
+    public players = new MapSchema<Player>();
 
     @type('number')
-    areaVirtualSize = 150;
+    public areaVirtualSize = 150;
 
-    waitingForPlayerTwo = true;
-
-    createPlayer (id: string, isPlayerOne: boolean) {
+    createPlayer (id: string, isPlayerOne: boolean): void {
         const startCoordinate = isPlayerOne ?
             new Coordinate(10, 10) :
             new Coordinate(this.areaVirtualSize - 10, this.areaVirtualSize - 10);
@@ -85,19 +83,19 @@ export class State extends Schema {
         );
     }
 
-    changeDirection (id: string, direction: string) {
+    changeDirection (id: string, direction: string): void {
         this.players[ id ].changeDirection(direction);
     }
 
-    removePlayer (id: string) {
+    removePlayer (id: string): void {
         delete this.players[ id ];
     }
 
-    getAllPlayerIds() {
+    getAllPlayerIds():  Array<string> {
         return Object.keys(this.players);
     }
 
-    makeGameStep() {
+    makeGameStep(): void {
         for (let playerId of this.getAllPlayerIds()) {
             this.players[playerId].move();
         }
@@ -105,17 +103,17 @@ export class State extends Schema {
 }
 
 export class MoverRoom extends Room<State> {
-    maxClients = 2;
+    public maxClients = 2;
 
-    waitingForPlayerTwo = true;
+    private waitingForPlayerTwo = true;
 
-    onCreate (options: any) {
+    onCreate (options: any): void {
         console.log("StateHandlerRoom created!", options);
 
         this.setState(new State());
     }
 
-    onJoin (client: Client) {
+    onJoin (client: Client): void {
         this.state.createPlayer(client.sessionId, this.waitingForPlayerTwo);
         if (! this.waitingForPlayerTwo) {
             this.startGame();
@@ -123,22 +121,22 @@ export class MoverRoom extends Room<State> {
         this.waitingForPlayerTwo = false;
     }
 
-    startGame() {
+    startGame(): void {
         this.setSimulationInterval(() => {
             this.state.makeGameStep();
         }, 100);
     }
 
-    onLeave (client: Client) {
+    onLeave(client: Client): void {
         this.state.removePlayer(client.sessionId);
     }
 
-    onMessage (client: Client, data: any) {
+    onMessage(client: Client, data: any): void {
         console.log("StateHandlerRoom received message from", client.sessionId, ":", data);
         this.state.changeDirection(client.sessionId, data.direction);
     }
 
-    onDispose () {
+    onDispose(): void {
         console.log("Dispose StateHandlerRoom");
     }
 

@@ -1,6 +1,7 @@
 import { Schema, type } from "@colyseus/schema";
 
 export class Coordinate extends Schema {
+
     @type("number")
     public x: number;
 
@@ -12,4 +13,5 @@ export class Coordinate extends Schema {
         this.x = x;
         this.y = y;
     }
+
 }

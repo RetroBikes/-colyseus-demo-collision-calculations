@@ -2,6 +2,7 @@ import { Schema, type, MapSchema } from "@colyseus/schema";
 import { Coordinate } from './Coordinate';
 
 export class Player extends Schema {
+
     @type(Coordinate)
     public currentPlayerPosition: Coordinate = new Coordinate(0, 0);
 
@@ -50,4 +51,5 @@ export class Player extends Schema {
         }
         this.addPlayerPart(currentPlayerPart.x, currentPlayerPart.y);
     }
+
 }

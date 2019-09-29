@@ -9,7 +9,7 @@ export class Arena extends Schema {
     @type('number')
     public areaVirtualSize = 150;
 
-    createPlayer(id: string, isPlayerOne: boolean): void {
+    public createPlayer(id: string, isPlayerOne: boolean): void {
         const startCoordinate = isPlayerOne ?
             new Coordinate(10, 10) :
             new Coordinate(this.areaVirtualSize - 10, this.areaVirtualSize - 10);
@@ -19,21 +19,22 @@ export class Arena extends Schema {
         );
     }
 
-    changeDirection(id: string, direction: string): void {
+    public changeDirection(id: string, direction: string): void {
         this.players[ id ].changeDirection(direction);
     }
 
-    removePlayer(id: string): void {
+    public removePlayer(id: string): void {
         delete this.players[ id ];
     }
 
-    getAllPlayerIds():  Array<string> {
-        return Object.keys(this.players);
-    }
-
-    makeGameStep(): void {
+    public makeGameStep(): void {
         for (let playerId of this.getAllPlayerIds()) {
             this.players[playerId].move();
         }
     }
+
+    private getAllPlayerIds():  Array<string> {
+        return Object.keys(this.players);
+    }
+
 }

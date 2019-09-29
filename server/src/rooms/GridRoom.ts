@@ -1,7 +1,7 @@
 import { Room, Client } from "colyseus";
-import { State } from '../schemas/State';
+import { Arena } from '../schemas/Arena';
 
-export class GridRoom extends Room<State> {
+export class GridRoom extends Room<Arena> {
     public maxClients = 2;
 
     private waitingForPlayerTwo = true;
@@ -9,7 +9,7 @@ export class GridRoom extends Room<State> {
     onCreate(options: any): void {
         console.log("StateHandlerRoom created!", options);
 
-        this.setState(new State());
+        this.setState(new Arena());
     }
 
     onJoin(client: Client): void {

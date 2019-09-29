@@ -2,7 +2,7 @@ import { Schema, type, MapSchema } from "@colyseus/schema";
 import { Coordinate } from './Coordinate';
 import { Player } from './Player';
 
-export class State extends Schema {
+export class Arena extends Schema {
     @type({ map: Player })
     public players = new MapSchema<Player>();
 

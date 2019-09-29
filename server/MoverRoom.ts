@@ -42,8 +42,27 @@ export class Player extends Schema {
         this.playerSize++;
     }
 
-    public changeDirection(direction: string) {
+    public changeDirection(direction: string): void {
         this.direction = direction;
+    }
+
+    public move(): void {
+        const currentPlayerPart = this.currentPlayerPosition;
+        switch(this.direction) {
+            case 'up':
+                currentPlayerPart.y -= 1;
+                break;
+            case 'down':
+                currentPlayerPart.y += 1;
+                break;
+            case 'left':
+                currentPlayerPart.x -= 1;
+                break;
+            case 'right':
+                currentPlayerPart.x += 1;
+                break;
+        }
+        this.addPlayerPart(currentPlayerPart.x, currentPlayerPart.y);
     }
 }
 
@@ -80,27 +99,8 @@ export class State extends Schema {
 
     makeGameStep() {
         for (let playerId of this.getAllPlayerIds()) {
-            this.movePlayer(playerId);
+            this.players[playerId].move();
         }
-    }
-
-    movePlayer (id: string) {
-        const currentPlayerPart = this.players[id].currentPlayerPosition;
-        switch(this.players[id].direction) {
-            case 'up':
-                currentPlayerPart.y -= 1;
-                break;
-            case 'down':
-                currentPlayerPart.y += 1;
-                break;
-            case 'left':
-                currentPlayerPart.x -= 1;
-                break;
-            case 'right':
-                currentPlayerPart.x += 1;
-                break;
-        }
-        this.players[id].addPlayerPart(currentPlayerPart.x, currentPlayerPart.y);
     }
 }
 

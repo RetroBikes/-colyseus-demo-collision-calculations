@@ -4,7 +4,7 @@ import cors from "cors";
 import { Server } from "colyseus";
 import { monitor } from "@colyseus/monitor";
 
-import { MoverRoom } from "./MoverRoom";
+import { GridRoom } from './src/rooms/GridRoom';
 
 const port = Number(process.env.PORT || 2567);
 const app = express()
@@ -19,7 +19,7 @@ const gameServer = new Server({
 });
 
 // register your room handlers
-gameServer.define('my_room', MoverRoom);
+gameServer.define('my_room', GridRoom);
 
 // register colyseus monitor AFTER registering your room handlers
 app.use("/colyseus", monitor(gameServer));

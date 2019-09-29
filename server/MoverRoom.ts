@@ -41,6 +41,10 @@ export class Player extends Schema {
         this.currentPlayerPosition = newPlayerPart;
         this.playerSize++;
     }
+
+    public changeDirection(direction: string) {
+        this.direction = direction;
+    }
 }
 
 export class State extends Schema {
@@ -63,7 +67,7 @@ export class State extends Schema {
     }
 
     changeDirection (id: string, direction: string) {
-        this.players[ id ].direction = direction;
+        this.players[ id ].changeDirection(direction);
     }
 
     removePlayer (id: string) {

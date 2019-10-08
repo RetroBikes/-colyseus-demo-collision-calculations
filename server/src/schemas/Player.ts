@@ -1,6 +1,25 @@
 import { Schema, type, MapSchema } from "@colyseus/schema";
 import { Coordinate } from './Coordinate';
 
+class OppositeDirections {
+
+    public static get(direction: string) {
+        switch (direction) {
+            case 'up':
+                return 'down';
+            case 'right':
+                return 'left';
+            case 'down':
+                return 'up';
+            case 'left':
+                return 'right';
+            default:
+                return '';
+        }
+    }
+
+}
+
 export class Player extends Schema {
 
     @type(Coordinate)
@@ -8,6 +27,8 @@ export class Player extends Schema {
 
     @type('string')
     public direction = 'right';
+
+    private canChangeDirection = true;
 
     private playerParts = new MapSchema<Coordinate>();
 
@@ -29,8 +50,13 @@ export class Player extends Schema {
         this.playerSize++;
     }
 
-    public changeDirection(direction: string): void {
+    public changeDirection(direction: any): void {
+        if (! this.canChangeDirection ||
+            this.direction === OppositeDirections.get(direction)) {
+            return;
+        }
         this.direction = direction;
+        this.denyChangeDirection();
     }
 
     public move(): void {
@@ -50,6 +76,14 @@ export class Player extends Schema {
                 break;
         }
         this.addPlayerPart(currentPlayerPart.x, currentPlayerPart.y);
+    }
+
+    public allowChangeDirection(): void {
+        this.canChangeDirection = true;
+    }
+
+    public denyChangeDirection(): void {
+        this.canChangeDirection = false;
     }
 
 }

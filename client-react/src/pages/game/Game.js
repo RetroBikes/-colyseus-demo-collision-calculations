@@ -87,14 +87,7 @@ class Game extends React.Component {
         case 40: direction = 'down'; break;
         case 37: direction = 'left'; break;
       }
-      const oppositeSides = {
-        'up': 'down',
-        'down': 'up',
-        'right': 'left',
-        'left': 'right',
-      };
-      console.log(oppositeSides[direction], this.state.direction, oppositeSides[direction] === this.state.direction);
-      if (oppositeSides[direction] === this.state.direction) {
+      if ('' === direction) {
         return;
       }
       room.send({ direction: direction });

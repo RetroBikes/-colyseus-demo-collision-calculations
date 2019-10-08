@@ -87,6 +87,9 @@ class Game extends React.Component {
         case 40: direction = 'down'; break;
         case 37: direction = 'left'; break;
       }
+      if ('' === direction) {
+        return;
+      }
       room.send({ direction: direction });
     });
   }

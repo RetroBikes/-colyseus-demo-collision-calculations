@@ -30,6 +30,7 @@ export class Arena extends Schema {
     public makeGameStep(): void {
         for (let playerId of this.getAllPlayerIds()) {
             this.players[playerId].move();
+            this.players[playerId].allowChangeDirection();
         }
     }
 

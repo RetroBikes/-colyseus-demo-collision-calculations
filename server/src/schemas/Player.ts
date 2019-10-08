@@ -28,6 +28,8 @@ export class Player extends Schema {
     @type('string')
     public direction = 'right';
 
+    private canChangeDirection = true;
+
     private playerParts = new MapSchema<Coordinate>();
 
     private playerSize = 0;
@@ -49,10 +51,12 @@ export class Player extends Schema {
     }
 
     public changeDirection(direction: any): void {
-        if (this.direction === OppositeDirections.get(direction)) {
+        if (! this.canChangeDirection ||
+            this.direction === OppositeDirections.get(direction)) {
             return;
         }
         this.direction = direction;
+        this.denyChangeDirection();
     }
 
     public move(): void {
@@ -72,6 +76,14 @@ export class Player extends Schema {
                 break;
         }
         this.addPlayerPart(currentPlayerPart.x, currentPlayerPart.y);
+    }
+
+    public allowChangeDirection(): void {
+        this.canChangeDirection = true;
+    }
+
+    public denyChangeDirection(): void {
+        this.canChangeDirection = false;
     }
 
 }

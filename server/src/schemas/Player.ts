@@ -1,24 +1,6 @@
 import { Schema, type, MapSchema } from "@colyseus/schema";
 import { Coordinate } from './Coordinate';
-
-class OppositeDirections {
-
-    public static get(direction: string) {
-        switch (direction) {
-            case 'up':
-                return 'down';
-            case 'right':
-                return 'left';
-            case 'down':
-                return 'up';
-            case 'left':
-                return 'right';
-            default:
-                return '';
-        }
-    }
-
-}
+import GenericObject from '../interfaces/GenericObject';
 
 export class Player extends Schema {
 
@@ -29,6 +11,13 @@ export class Player extends Schema {
     public direction = 'right';
 
     private canChangeDirection = true;
+
+    private oppositeDirections: GenericObject = {
+        up: 'down',
+        right: 'left',
+        down: 'up',
+        left: 'right',
+    };
 
     private playerParts = new MapSchema<Coordinate>();
 
@@ -52,7 +41,7 @@ export class Player extends Schema {
 
     public changeDirection(direction: any): void {
         if (! this.canChangeDirection ||
-            this.direction === OppositeDirections.get(direction)) {
+            this.direction === this.oppositeDirections[direction]) {
             return;
         }
         this.direction = direction;

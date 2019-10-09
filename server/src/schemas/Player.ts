@@ -1,11 +1,6 @@
 import { Schema, type, MapSchema } from "@colyseus/schema";
 import { Coordinate } from './Coordinate';
-
-interface GenericObject {
-
-    [key: string]: string;
-
-}
+import GenericObject from '../interfaces/GenericObject';
 
 export class Player extends Schema {
 

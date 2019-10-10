@@ -1,5 +1,5 @@
-export default interface GenericObject {
+export default interface GenericObject<T> {
 
-    [key: string]: string;
+    [key: string]: T;
 
 }

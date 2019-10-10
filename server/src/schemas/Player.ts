@@ -12,7 +12,7 @@ export class Player extends Schema {
 
     private canChangeDirection = true;
 
-    private oppositeDirections: GenericObject = {
+    private oppositeDirections: GenericObject<string> = {
         up: 'down',
         right: 'left',
         down: 'up',
@@ -39,7 +39,7 @@ export class Player extends Schema {
         this.playerSize++;
     }
 
-    public changeDirection(direction: any): void {
+    public changeDirection(direction: string): void {
         if (! this.canChangeDirection ||
             this.direction === this.oppositeDirections[direction]) {
             return;

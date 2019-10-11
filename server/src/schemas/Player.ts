@@ -42,7 +42,7 @@ export class Player extends Schema {
         this.denyChangeDirection();
     }
 
-    public move(): Coordinate {
+    public move(): void {
         const currentPlayerPart = this.currentPlayerPosition;
         switch(this.direction) {
             case 'up':
@@ -59,7 +59,6 @@ export class Player extends Schema {
                 break;
         }
         this.addPlayerPart(currentPlayerPart.x, currentPlayerPart.y);
-        return currentPlayerPart;
     }
 
     public allowChangeDirection(): void {

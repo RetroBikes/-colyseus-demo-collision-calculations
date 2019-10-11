@@ -31,7 +31,8 @@ export class Arena extends Schema {
 
     public makeGameStep(): void {
         for (let playerId of this.getAllPlayerIds()) {
-            const currentPlayerPart: Coordinate = this.players[playerId].move();
+            this.players[playerId].move();
+            const currentPlayerPart: Coordinate = this.players[playerId].currentPlayerPosition;
             this.gameObjectHashs.push(currentPlayerPart.toString());
             this.players[playerId].allowChangeDirection();
         }

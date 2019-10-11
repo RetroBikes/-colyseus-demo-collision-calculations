@@ -19,8 +19,6 @@ export class Player extends Schema {
         left: 'right',
     };
 
-    private static gameObjectHashs = new Array<string>();
-
     public constructor(startPositionX: number, startPositionY: number, initialDirection = 'right') {
         super();
         this.addPlayerPart(
@@ -33,7 +31,6 @@ export class Player extends Schema {
     public addPlayerPart(x: number, y: number): void {
         const newPlayerPart = new Coordinate(x, y);
         this.currentPlayerPosition = newPlayerPart;
-        Player.gameObjectHashs.push(newPlayerPart.toString());
     }
 
     public changeDirection(direction: string): void {
@@ -45,7 +42,7 @@ export class Player extends Schema {
         this.denyChangeDirection();
     }
 
-    public move(): void {
+    public move(): Coordinate {
         const currentPlayerPart = this.currentPlayerPosition;
         switch(this.direction) {
             case 'up':
@@ -62,6 +59,7 @@ export class Player extends Schema {
                 break;
         }
         this.addPlayerPart(currentPlayerPart.x, currentPlayerPart.y);
+        return currentPlayerPart;
     }
 
     public allowChangeDirection(): void {

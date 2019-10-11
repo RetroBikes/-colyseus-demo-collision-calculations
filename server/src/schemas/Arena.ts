@@ -9,6 +9,8 @@ export class Arena extends Schema {
     @type('number')
     public areaVirtualSize = 150;
 
+    private gameObjectHashs = new Array<string>();
+
     public createPlayer(id: string, isPlayerOne: boolean): void {
         const startCoordinate = isPlayerOne ?
             new Coordinate(10, 10) :
@@ -29,7 +31,8 @@ export class Arena extends Schema {
 
     public makeGameStep(): void {
         for (let playerId of this.getAllPlayerIds()) {
-            this.players[playerId].move();
+            const currentPlayerPart: Coordinate = this.players[playerId].move();
+            this.gameObjectHashs.push(currentPlayerPart.toString());
             this.players[playerId].allowChangeDirection();
         }
     }

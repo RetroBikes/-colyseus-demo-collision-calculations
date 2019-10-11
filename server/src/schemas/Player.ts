@@ -19,9 +19,7 @@ export class Player extends Schema {
         left: 'right',
     };
 
-    private playerParts = new MapSchema<Coordinate>();
-
-    private playerSize = 0;
+    private static gameObjectHashs = new Array<string>();
 
     public constructor(startPositionX: number, startPositionY: number, initialDirection = 'right') {
         super();
@@ -34,9 +32,8 @@ export class Player extends Schema {
 
     public addPlayerPart(x: number, y: number): void {
         const newPlayerPart = new Coordinate(x, y);
-        this.playerParts[this.playerSize] = newPlayerPart;
         this.currentPlayerPosition = newPlayerPart;
-        this.playerSize++;
+        Player.gameObjectHashs.push(newPlayerPart.toString());
     }
 
     public changeDirection(direction: string): void {

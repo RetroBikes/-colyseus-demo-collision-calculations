@@ -16,8 +16,8 @@ export class Arena extends Schema {
             new Coordinate(10, 10) :
             new Coordinate(this.areaVirtualSize - 10, this.areaVirtualSize - 10);
         this.players[ id ] = new Player(
-            startCoordinate.x, startCoordinate.y,
-            isPlayerOne ? 'right' : 'left'
+            startCoordinate,
+            isPlayerOne ? 'right' : 'left',
         );
     }
 

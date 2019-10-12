@@ -19,17 +19,13 @@ export class Player extends Schema {
         left: 'right',
     };
 
-    public constructor(startPositionX: number, startPositionY: number, initialDirection = 'right') {
+    public constructor(startPosition: Coordinate, initialDirection = 'right') {
         super();
-        this.addPlayerPart(
-            startPositionX,
-            startPositionY,
-        );
+        this.addPlayerPart(startPosition);
         this.direction = initialDirection;
     }
 
-    public addPlayerPart(x: number, y: number): void {
-        const newPlayerPart = new Coordinate(x, y);
+    public addPlayerPart(newPlayerPart: Coordinate): void {
         this.currentPlayerPosition = newPlayerPart;
     }
 
@@ -58,7 +54,7 @@ export class Player extends Schema {
                 currentPlayerPart.x += 1;
                 break;
         }
-        this.addPlayerPart(currentPlayerPart.x, currentPlayerPart.y);
+        this.addPlayerPart(currentPlayerPart);
     }
 
     public allowChangeDirection(): void {

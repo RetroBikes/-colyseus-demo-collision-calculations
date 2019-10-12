@@ -26,7 +26,7 @@ export class GridRoom extends Room<Arena> {
 
     public onMessage(client: Client, data: any): void {
         console.log("StateHandlerRoom received message from", client.sessionId, ":", data);
-        this.state.changeDirection(client.sessionId, data.direction);
+        this.state.changePlayerDirection(client.sessionId, data.direction);
     }
 
     public onDispose(): void {

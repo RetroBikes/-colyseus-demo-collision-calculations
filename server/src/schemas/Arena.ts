@@ -16,19 +16,19 @@ export class Arena extends Schema {
         this.initializeAreaObjectHashs();
     }
 
-    public createPlayer(id: string, isPlayerOne: boolean): void {
+    public createPlayer(playerId: string, isPlayerOne: boolean): void {
         const startCoordinate = isPlayerOne ?
             new Coordinate(10, 10) :
             new Coordinate(this.areaVirtualSize - 10, this.areaVirtualSize - 10);
-        this.players[ id ] = new Player(startCoordinate, isPlayerOne ? 'right' : 'left');
+        this.players[playerId] = new Player(startCoordinate, isPlayerOne ? 'right' : 'left');
     }
 
-    public changeDirection(id: string, direction: string): void {
-        this.players[ id ].changeDirection(direction);
+    public changePlayerDirection(playerId: string, direction: string): void {
+        this.players[playerId].changeDirection(direction);
     }
 
-    public removePlayer(id: string): void {
-        delete this.players[ id ];
+    public removePlayer(playerId: string): void {
+        delete this.players[playerId];
     }
 
     public makeGameStep(): void {
@@ -44,7 +44,7 @@ export class Arena extends Schema {
         return Object.keys(this.players);
     }
 
-    public addGameObjectHash(coordinate: Coordinate): void {
+    private addGameObjectHash(coordinate: Coordinate): void {
         this.gameObjectHashs.push(coordinate.toString());
     }
 

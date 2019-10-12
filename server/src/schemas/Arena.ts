@@ -11,14 +11,16 @@ export class Arena extends Schema {
 
     private gameObjectHashs = new Array<string>();
 
+    public constructor() {
+        super();
+        this.initializeAreaObjectHashs();
+    }
+
     public createPlayer(id: string, isPlayerOne: boolean): void {
         const startCoordinate = isPlayerOne ?
             new Coordinate(10, 10) :
             new Coordinate(this.areaVirtualSize - 10, this.areaVirtualSize - 10);
-        this.players[ id ] = new Player(
-            startCoordinate,
-            isPlayerOne ? 'right' : 'left',
-        );
+        this.players[ id ] = new Player(startCoordinate, isPlayerOne ? 'right' : 'left');
     }
 
     public changeDirection(id: string, direction: string): void {
@@ -40,6 +42,25 @@ export class Arena extends Schema {
 
     private getAllPlayerIds():  Array<string> {
         return Object.keys(this.players);
+    }
+
+    private initializeAreaObjectHashs(): void {
+        for (let x = -1; x <= this.areaVirtualSize + 1; x++) {
+            if (-1 === x || this.areaVirtualSize + 1 === x) {
+                // First and last rows, take all the y coordinates.
+                for (let y = -1; y <= this.areaVirtualSize + 1; y++) {
+                    const coordinate = new Coordinate(x, y);
+                    this.gameObjectHashs.push(coordinate.toString());
+                    console.log(coordinate.toString());
+                }
+            } else {
+                // Middle rows, take only first and last y coordinates.
+                const coordinateUp = new Coordinate(x, -1),
+                    coordinateBottom = new Coordinate(x, this.areaVirtualSize + 1);
+                this.gameObjectHashs.push(coordinateUp.toString());
+                this.gameObjectHashs.push(coordinateBottom.toString());
+            }
+        }
     }
 
 }

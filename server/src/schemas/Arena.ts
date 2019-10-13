@@ -11,13 +11,10 @@ export class Arena extends Schema {
     @type('number')
     public areaVirtualSize = 150;
 
-    private gameObjectHashs = new Array<string>();
-
     private grid: TheGrid;
 
     public constructor() {
         super();
-        this.initializeAreaObjectHashs();
         this.grid = new TheGrid(this.areaVirtualSize);
     }
 
@@ -40,35 +37,13 @@ export class Arena extends Schema {
         for (let playerId of this.getAllPlayerIds()) {
             this.players[playerId].move();
             const currentPlayerPart: Coordinate = this.players[playerId].currentPlayerPosition;
-            this.addGameObjectHash(currentPlayerPart);
+            this.grid.occupySpace(currentPlayerPart);
             this.players[playerId].allowChangeDirection();
         }
     }
 
     private getAllPlayerIds():  Array<string> {
         return Object.keys(this.players);
-    }
-
-    private addGameObjectHash(coordinate: Coordinate): void {
-        this.gameObjectHashs.push(coordinate.toString());
-    }
-
-    private initializeAreaObjectHashs(): void {
-        for (let x = -1; x <= this.areaVirtualSize + 1; x++) {
-            if (-1 === x || this.areaVirtualSize + 1 === x) {
-                // First and last rows, take all the y coordinates.
-                for (let y = -1; y <= this.areaVirtualSize + 1; y++) {
-                    const coordinate = new Coordinate(x, y);
-                    this.addGameObjectHash(coordinate);
-                }
-            } else {
-                // Middle rows, take only first and last y coordinates.
-                const coordinateUp = new Coordinate(x, -1),
-                    coordinateBottom = new Coordinate(x, this.areaVirtualSize + 1);
-                this.addGameObjectHash(coordinateUp);
-                this.addGameObjectHash(coordinateBottom);
-            }
-        }
     }
 
 }

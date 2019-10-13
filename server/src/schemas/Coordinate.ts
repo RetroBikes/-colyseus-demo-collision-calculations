@@ -14,8 +14,4 @@ export class Coordinate extends Schema {
         this.y = y;
     }
 
-    public toString(): string {
-        return `${this.x}-${this.y}`;
-    }
-
 }

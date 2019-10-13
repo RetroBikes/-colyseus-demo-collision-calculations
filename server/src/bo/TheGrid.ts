@@ -1,4 +1,4 @@
-import { Coordinate } from './Coordinate';
+import { Coordinate } from '../schemas/Coordinate';
 
 export class TheGrid {
 

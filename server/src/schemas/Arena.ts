@@ -1,7 +1,7 @@
 import { Schema, type, MapSchema } from "@colyseus/schema";
 import { Coordinate } from './Coordinate';
 import { Player } from './Player';
-import { TheGrid } from './TheGrid';
+import { TheGrid } from '../bo/TheGrid';
 
 export class Arena extends Schema {
 

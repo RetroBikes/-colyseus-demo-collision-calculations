@@ -10,6 +10,9 @@ export class Player extends Schema {
     @type('string')
     public direction = 'right';
 
+    @type('boolean')
+    public isAlive = true;
+
     private canChangeDirection = true;
 
     private oppositeDirections: GenericObject<string> = {
@@ -63,6 +66,10 @@ export class Player extends Schema {
 
     public denyChangeDirection(): void {
         this.canChangeDirection = false;
+    }
+
+    public kill(): void {
+        this.isAlive = false;
     }
 
 }

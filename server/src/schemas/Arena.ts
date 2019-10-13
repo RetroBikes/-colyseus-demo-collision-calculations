@@ -1,8 +1,10 @@
 import { Schema, type, MapSchema } from "@colyseus/schema";
 import { Coordinate } from './Coordinate';
 import { Player } from './Player';
+import { TheGrid } from './TheGrid';
 
 export class Arena extends Schema {
+
     @type({ map: Player })
     public players = new MapSchema<Player>();
 
@@ -11,9 +13,12 @@ export class Arena extends Schema {
 
     private gameObjectHashs = new Array<string>();
 
+    private grid: TheGrid;
+
     public constructor() {
         super();
         this.initializeAreaObjectHashs();
+        this.grid = new TheGrid(this.areaVirtualSize);
     }
 
     public createPlayer(playerId: string, isPlayerOne: boolean): void {

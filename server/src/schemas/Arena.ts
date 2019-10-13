@@ -1,4 +1,4 @@
-import { Schema, type, MapSchema } from "@colyseus/schema";
+import { Schema, type, MapSchema } from '@colyseus/schema';
 import { Coordinate } from './Coordinate';
 import { Player } from './Player';
 import { TheGrid } from '../bo/TheGrid';
@@ -57,7 +57,7 @@ export class Arena extends Schema {
         }
     }
 
-    private getAllPlayerIds():  Array<string> {
+    private getAllPlayerIds(): Array<string> {
         return Object.keys(this.players);
     }
 

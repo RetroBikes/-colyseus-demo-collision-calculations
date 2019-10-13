@@ -1,4 +1,4 @@
-import { Schema, type, MapSchema } from "@colyseus/schema";
+import { Schema, type } from '@colyseus/schema';
 import { Coordinate } from './Coordinate';
 import GenericObject from '../interfaces/GenericObject';
 

@@ -36,9 +36,13 @@ export class Arena extends Schema {
 
     public makeGameStep(): void {
         const allPlayerIds = this.getAllPlayerIds();
+
+        // Move all players.
         for (let playerId of allPlayerIds) {
             this.players[playerId].move();
         }
+
+        // Calculate collisions to all players.
         for (let playerId of allPlayerIds) {
             const currentPlayerPart: Coordinate = this.players[playerId].currentPlayerPosition;
             if (this.grid.isSpaceOccupied(currentPlayerPart)) {
@@ -46,6 +50,8 @@ export class Arena extends Schema {
             }
             this.grid.occupySpace(currentPlayerPart);
         }
+
+        // Allow all players to change directions.
         for (let playerId of allPlayerIds) {
             this.players[playerId].allowChangeDirection();
         }

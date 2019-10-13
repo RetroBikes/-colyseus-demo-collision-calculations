@@ -8,10 +8,10 @@ export class TheGrid {
 
     public constructor(gridSize: number) {
         this.gridSize = gridSize;
-        const emptyLine = new Array<boolean>((gridSize));
-        emptyLine.fill(false);
+        let emptyLine = new Array<boolean>((gridSize));
+        emptyLine = Array.from(emptyLine, () => false);
         this.gridItems = new Array<Array<boolean>>(gridSize);
-        this.gridItems.fill(emptyLine);
+        this.gridItems = Array.from(this.gridItems, () => emptyLine.slice());
     }
 
     public occupySpace(spaceCoordinate: Coordinate): void {

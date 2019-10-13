@@ -23,6 +23,7 @@ export class Arena extends Schema {
             new Coordinate(10, 10) :
             new Coordinate(this.areaVirtualSize - 10, this.areaVirtualSize - 10);
         this.players[playerId] = new Player(startCoordinate, isPlayerOne ? 'right' : 'left');
+        this.grid.occupySpace(startCoordinate);
     }
 
     public changePlayerDirection(playerId: string, direction: string): void {
@@ -34,10 +35,18 @@ export class Arena extends Schema {
     }
 
     public makeGameStep(): void {
-        for (let playerId of this.getAllPlayerIds()) {
+        const allPlayerIds = this.getAllPlayerIds();
+        for (let playerId of allPlayerIds) {
             this.players[playerId].move();
+        }
+        for (let playerId of allPlayerIds) {
             const currentPlayerPart: Coordinate = this.players[playerId].currentPlayerPosition;
+            if (this.grid.isSpaceOccupied(currentPlayerPart)) {
+                this.players[playerId].kill();
+            }
             this.grid.occupySpace(currentPlayerPart);
+        }
+        for (let playerId of allPlayerIds) {
             this.players[playerId].allowChangeDirection();
         }
     }

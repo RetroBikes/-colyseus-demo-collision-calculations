@@ -12,7 +12,14 @@ export class TheGrid {
         emptyLine.fill(false);
         this.gridItems = new Array<Array<boolean>>(gridSize);
         this.gridItems.fill(emptyLine);
-        console.log(this.gridItems);
+    }
+
+    public occupySpace(spaceCoordinate: Coordinate): void {
+        if (0 > spaceCoordinate.x || this.gridSize < spaceCoordinate.x ||
+            0 > spaceCoordinate.y || this.gridSize < spaceCoordinate.y) {
+            return;
+        }
+        this.gridItems[spaceCoordinate.x][spaceCoordinate.y] = true;
     }
 
     public isSpaceOccupied(spaceCoordinate: Coordinate): boolean {

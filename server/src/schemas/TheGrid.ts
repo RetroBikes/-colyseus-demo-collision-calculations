@@ -15,19 +15,22 @@ export class TheGrid {
     }
 
     public occupySpace(spaceCoordinate: Coordinate): void {
-        if (0 > spaceCoordinate.x || this.gridSize < spaceCoordinate.x ||
-            0 > spaceCoordinate.y || this.gridSize < spaceCoordinate.y) {
+        if (this.spaceExists(spaceCoordinate)) {
             return;
         }
         this.gridItems[spaceCoordinate.x][spaceCoordinate.y] = true;
     }
 
     public isSpaceOccupied(spaceCoordinate: Coordinate): boolean {
-        if (0 > spaceCoordinate.x || this.gridSize < spaceCoordinate.x ||
-            0 > spaceCoordinate.y || this.gridSize < spaceCoordinate.y) {
+        if (this.spaceExists(spaceCoordinate)) {
             return true;
         }
         return this.gridItems[spaceCoordinate.x][spaceCoordinate.y];
+    }
+
+    private spaceExists(spaceCoordinate: Coordinate): boolean {
+        return 0 <= spaceCoordinate.x || this.gridSize > spaceCoordinate.x ||
+            0 <= spaceCoordinate.y || this.gridSize > spaceCoordinate.y;
     }
 
 }

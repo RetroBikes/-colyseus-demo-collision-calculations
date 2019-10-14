@@ -44,7 +44,7 @@ export class Arena extends Schema {
 
         // Calculate collisions to all players.
         for (let playerId of allPlayerIds) {
-            const currentPlayerPart: Coordinate = this.players[playerId].currentPlayerPosition;
+            const currentPlayerPart: Coordinate = this.players[playerId].currentPosition;
             if (this.grid.isSpaceOccupied(currentPlayerPart)) {
                 this.players[playerId].kill();
             }

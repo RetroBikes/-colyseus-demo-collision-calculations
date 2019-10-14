@@ -5,7 +5,7 @@ import GenericObject from '../interfaces/GenericObject';
 export class Player extends Schema {
 
     @type(Coordinate)
-    public currentPlayerPosition: Coordinate = new Coordinate(0, 0);
+    public currentPosition: Coordinate;
 
     @type('string')
     public direction = 'right';
@@ -24,12 +24,8 @@ export class Player extends Schema {
 
     public constructor(startPosition: Coordinate, initialDirection = 'right') {
         super();
-        this.addPlayerPart(startPosition);
         this.direction = initialDirection;
-    }
-
-    public addPlayerPart(newPlayerPart: Coordinate): void {
-        this.currentPlayerPosition = newPlayerPart;
+        this.currentPosition = startPosition
     }
 
     public changeDirection(direction: string): void {
@@ -42,7 +38,7 @@ export class Player extends Schema {
     }
 
     public move(): void {
-        const currentPlayerPart = this.currentPlayerPosition;
+        const currentPlayerPart = this.currentPosition;
         switch(this.direction) {
             case 'up':
                 currentPlayerPart.y -= 1;
@@ -57,7 +53,7 @@ export class Player extends Schema {
                 currentPlayerPart.x += 1;
                 break;
         }
-        this.addPlayerPart(currentPlayerPart);
+        this.updateCurrentPosition(currentPlayerPart);
     }
 
     public allowChangeDirection(): void {
@@ -70,6 +66,10 @@ export class Player extends Schema {
 
     public kill(): void {
         this.isAlive = false;
+    }
+
+    private updateCurrentPosition(newPlayerPart: Coordinate): void {
+        this.currentPosition = newPlayerPart;
     }
 
 }

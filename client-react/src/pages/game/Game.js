@@ -51,7 +51,7 @@ class Game extends React.Component {
 
       // Get the players data and the current player position.
       const newPlayers = this.state.players,
-        currentPlayerPart = player.currentPlayerPosition;
+        currentPlayerPart = player.currentPosition;
       let existingPlayerParts = [];
 
       // Take the player parts, if already exists.

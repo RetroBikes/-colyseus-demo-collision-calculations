@@ -38,22 +38,22 @@ export class Player extends Schema {
     }
 
     public move(): void {
-        const currentPlayerPart = this.currentPosition;
+        const newPosition = this.currentPosition;
         switch(this.direction) {
             case 'up':
-                currentPlayerPart.y -= 1;
+                newPosition.y -= 1;
                 break;
             case 'down':
-                currentPlayerPart.y += 1;
+                newPosition.y += 1;
                 break;
             case 'left':
-                currentPlayerPart.x -= 1;
+                newPosition.x -= 1;
                 break;
             case 'right':
-                currentPlayerPart.x += 1;
+                newPosition.x += 1;
                 break;
         }
-        this.updateCurrentPosition(currentPlayerPart);
+        this.updateCurrentPosition(newPosition);
     }
 
     public allowChangeDirection(): void {
@@ -68,8 +68,8 @@ export class Player extends Schema {
         this.isAlive = false;
     }
 
-    private updateCurrentPosition(newPlayerPart: Coordinate): void {
-        this.currentPosition = newPlayerPart;
+    private updateCurrentPosition(newPlayerPosition: Coordinate): void {
+        this.currentPosition = newPlayerPosition;
     }
 
 }

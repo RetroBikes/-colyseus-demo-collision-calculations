@@ -44,11 +44,11 @@ export class Arena extends Schema {
 
         // Calculate collisions to all players.
         for (let playerId of allPlayerIds) {
-            const currentPlayerPart: Coordinate = this.players[playerId].currentPosition;
-            if (this.grid.isSpaceOccupied(currentPlayerPart)) {
+            const currentPlayerPosition: Coordinate = this.players[playerId].currentPosition;
+            if (this.grid.isSpaceOccupied(currentPlayerPosition)) {
                 this.players[playerId].kill();
             }
-            this.grid.occupySpace(currentPlayerPart);
+            this.grid.occupySpace(currentPlayerPosition);
         }
 
         // Allow all players to change directions.

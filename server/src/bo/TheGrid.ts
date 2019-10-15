@@ -1,4 +1,5 @@
 import { Coordinate } from '../schemas/Coordinate';
+import GenericObject from '../interfaces/GenericObject';
 
 export class TheGrid {
 
@@ -6,22 +7,26 @@ export class TheGrid {
 
     private gridItems: Array<Array<boolean>>;
 
+    private lastAddedItems: GenericObject<Coordinate>;
+
     public constructor(gridSize: number) {
         this.gridSize = gridSize;
         let emptyLine = new Array<boolean>((gridSize));
         emptyLine = Array.from(emptyLine, () => false);
         this.gridItems = new Array<Array<boolean>>(gridSize);
         this.gridItems = Array.from(this.gridItems, () => emptyLine.slice());
+        this.lastAddedItems = {};
     }
 
-    public occupySpace(spaceCoordinate: Coordinate): void {
+    public occupySpace(spaceCoordinate: Coordinate, playerId: string): void {
         if (! this.spaceExists(spaceCoordinate)) {
             return;
         }
         this.gridItems[spaceCoordinate.x][spaceCoordinate.y] = true;
+        this.lastAddedItems[playerId] = spaceCoordinate;
     }
 
-    public isSpaceOccupied(spaceCoordinate: Coordinate): boolean {
+    public isSpaceOccupied(spaceCoordinate: Coordinate, playerId: string): boolean {
         if (! this.spaceExists(spaceCoordinate)) {
             return true;
         }

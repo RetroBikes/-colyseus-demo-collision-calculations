@@ -23,14 +23,16 @@ export class TheGrid {
             return;
         }
         this.gridItems[spaceCoordinate.x][spaceCoordinate.y] = true;
-        this.lastAddedItems[playerId] = spaceCoordinate;
+        this.lastAddedItems[playerId] = new Coordinate(spaceCoordinate.x, spaceCoordinate.y);
     }
 
     public isSpaceOccupied(spaceCoordinate: Coordinate, playerId: string): boolean {
         if (! this.spaceExists(spaceCoordinate)) {
             return true;
         }
-        return this.gridItems[spaceCoordinate.x][spaceCoordinate.y];
+        return this.gridItems[spaceCoordinate.x][spaceCoordinate.y] &&
+            ('undefined' === typeof this.lastAddedItems[playerId] ||
+            this.lastAddedItems[playerId].toString() !== spaceCoordinate.toString());
     }
 
     private spaceExists(spaceCoordinate: Coordinate): boolean {

@@ -7,7 +7,7 @@ export class TheGrid {
 
     private gridItems: Array<Array<boolean>>;
 
-    private lastAddedItems: GenericObject<Coordinate>;
+    private spacesCandidatesToOccupy: GenericObject<Coordinate>;
 
     public constructor(gridSize: number) {
         this.gridSize = gridSize;
@@ -15,7 +15,14 @@ export class TheGrid {
         emptyLine = Array.from(emptyLine, () => false);
         this.gridItems = new Array<Array<boolean>>(gridSize);
         this.gridItems = Array.from(this.gridItems, () => emptyLine.slice());
-        this.lastAddedItems = {};
+        this.spacesCandidatesToOccupy = {};
+    }
+
+    public addSpaceCandidateToOccupy(spaceCoordinate: Coordinate, playerId: string): void {
+        if (! this.spaceExists(spaceCoordinate)) {
+            return;
+        }
+        this.spacesCandidatesToOccupy[playerId] = new Coordinate(spaceCoordinate.x, spaceCoordinate.y);
     }
 
     public occupySpace(spaceCoordinate: Coordinate, playerId: string): void {
@@ -23,7 +30,6 @@ export class TheGrid {
             return;
         }
         this.gridItems[spaceCoordinate.x][spaceCoordinate.y] = true;
-        this.lastAddedItems[playerId] = new Coordinate(spaceCoordinate.x, spaceCoordinate.y);
     }
 
     public isSpaceOccupied(spaceCoordinate: Coordinate, playerId: string): boolean {
@@ -31,8 +37,8 @@ export class TheGrid {
             return true;
         }
         return this.gridItems[spaceCoordinate.x][spaceCoordinate.y] &&
-            ('undefined' === typeof this.lastAddedItems[playerId] ||
-            this.lastAddedItems[playerId].toString() !== spaceCoordinate.toString());
+            ('undefined' === typeof this.spacesCandidatesToOccupy[playerId] ||
+            this.spacesCandidatesToOccupy[playerId].toString() !== spaceCoordinate.toString());
     }
 
     private spaceExists(spaceCoordinate: Coordinate): boolean {

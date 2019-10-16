@@ -23,7 +23,7 @@ export class Arena extends Schema {
             new Coordinate(10, 10) :
             new Coordinate(this.areaVirtualSize - 10, this.areaVirtualSize - 10);
         this.players[playerId] = new Player(startCoordinate, isPlayerOne ? 'right' : 'left');
-        this.grid.occupySpace(startCoordinate, playerId);
+        this.grid.occupySpace(startCoordinate);
     }
 
     public changePlayerDirection(playerId: string, direction: string): void {
@@ -55,7 +55,7 @@ export class Arena extends Schema {
         // Flush game step.
         for (let playerId of allPlayerIds) {
             const currentPlayerPosition: Coordinate = this.players[playerId].currentPosition;
-            this.grid.occupySpace(currentPlayerPosition, playerId);
+            this.grid.occupySpace(currentPlayerPosition);
             this.players[playerId].allowChangeDirection();
         }
     }

@@ -25,7 +25,7 @@ export class TheGrid {
         this.spacesCandidatesToOccupy[playerId] = new Coordinate(spaceCoordinate.x, spaceCoordinate.y);
     }
 
-    public occupySpace(spaceCoordinate: Coordinate, playerId: string): void {
+    public occupySpace(spaceCoordinate: Coordinate): void {
         if (! this.spaceExists(spaceCoordinate)) {
             return;
         }

@@ -1,13 +1,13 @@
-import { Room, Client } from "colyseus";
+import { Room, Client } from 'colyseus';
 import { Arena } from '../schemas/Arena';
 
-export class GridRoom extends Room<Arena> {
+export class GameRoom extends Room<Arena> {
     public maxClients = 2;
 
     private waitingForPlayerTwo = true;
 
     public onCreate(options: any): void {
-        console.log("StateHandlerRoom created!", options);
+        console.log('StateHandlerRoom created!', options);
 
         this.setState(new Arena());
     }
@@ -25,12 +25,12 @@ export class GridRoom extends Room<Arena> {
     }
 
     public onMessage(client: Client, data: any): void {
-        console.log("StateHandlerRoom received message from", client.sessionId, ":", data);
-        this.state.changeDirection(client.sessionId, data.direction);
+        console.log('StateHandlerRoom received message from', client.sessionId, ':', data);
+        this.state.changePlayerDirection(client.sessionId, data.direction);
     }
 
     public onDispose(): void {
-        console.log("Dispose StateHandlerRoom");
+        console.log('Dispose StateHandlerRoom');
     }
 
     private startGame(): void {

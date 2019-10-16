@@ -33,12 +33,21 @@ export class TheGrid {
     }
 
     public isSpaceOccupied(spaceCoordinate: Coordinate, playerId: string): boolean {
+        // If is out of grid bounds.
         if (! this.spaceExists(spaceCoordinate)) {
             return true;
         }
-        return this.gridItems[spaceCoordinate.x][spaceCoordinate.y] &&
-            ('undefined' === typeof this.spacesCandidatesToOccupy[playerId] ||
-            this.spacesCandidatesToOccupy[playerId].toString() !== spaceCoordinate.toString());
+        // If will crash on next opponent step.
+        for (let spacePlayerId in this.spacesCandidatesToOccupy) {
+            if (playerId === spacePlayerId) {
+                continue;
+            }
+            if (this.spacesCandidatesToOccupy[spacePlayerId].toString() === spaceCoordinate.toString()) {
+                return true;
+            }
+        }
+        // If will crash on opponent trail.
+        return this.gridItems[spaceCoordinate.x][spaceCoordinate.y];
     }
 
     private spaceExists(spaceCoordinate: Coordinate): boolean {

@@ -35,12 +35,26 @@ export class Arena extends Schema {
     }
 
     public makeGameStep(): void {
-        for (let playerId of this.getAllPlayerIds()) {
+        const allPlayerIds = this.getAllPlayerIds();
+
+        // Move all players.
+        for (let playerId of allPlayerIds) {
+            const currentPlayerPosition: Coordinate = this.players[playerId].currentPosition;
             this.players[playerId].move();
+            this.grid.addSpaceCandidateToOccupy(currentPlayerPosition, playerId);
+        }
+
+        // Check collisions.
+        for (let playerId of allPlayerIds) {
             const currentPlayerPosition: Coordinate = this.players[playerId].currentPosition;
             if (this.grid.isSpaceOccupied(currentPlayerPosition, playerId)) {
                 this.players[playerId].kill();
             }
+        }
+
+        // Flush game step.
+        for (let playerId of allPlayerIds) {
+            const currentPlayerPosition: Coordinate = this.players[playerId].currentPosition;
             this.grid.occupySpace(currentPlayerPosition, playerId);
             this.players[playerId].allowChangeDirection();
         }

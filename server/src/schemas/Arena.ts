@@ -42,33 +42,30 @@ export class Arena extends Schema {
     }
 
     private moveAllPlayers(): void {
-        this.loopAllPlayers((playerId: string) => {
-            const currentPlayerPosition: Coordinate = this.players[playerId].currentPosition;
-            this.players[playerId].move();
-            this.grid.addSpaceCandidateToOccupy(currentPlayerPosition, playerId);
+        this.loopAllPlayers((player: Player, playerId: string) => {
+            player.move();
+            this.grid.addSpaceCandidateToOccupy(player.currentPosition, playerId);
         });
     }
 
     private calculateCollisions(): void {
-        this.loopAllPlayers((playerId: string) => {
-            const currentPlayerPosition: Coordinate = this.players[playerId].currentPosition;
-            if (this.grid.isSpaceOccupied(currentPlayerPosition, playerId)) {
-                this.players[playerId].kill();
+        this.loopAllPlayers((player: Player, playerId: string) => {
+            if (this.grid.isSpaceOccupied(player.currentPosition, playerId)) {
+                player.kill();
             }
         });
     }
 
     private flushGameStep(): void {
-        this.loopAllPlayers((playerId: string) => {
-            const currentPlayerPosition: Coordinate = this.players[playerId].currentPosition;
-            this.grid.occupySpace(currentPlayerPosition);
-            this.players[playerId].allowChangeDirection();
+        this.loopAllPlayers((player: Player) => {
+            this.grid.occupySpace(player.currentPosition);
+            player.allowChangeDirection();
         });
     }
 
     private loopAllPlayers(callback: Function): void {
         for (let playerId of Object.keys(this.players)) {
-            callback(playerId);
+            callback(this.players[playerId], playerId);
         }
     }
 

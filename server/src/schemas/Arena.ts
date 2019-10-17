@@ -43,14 +43,14 @@ export default class Arena extends Schema {
     }
 
     private moveAllPlayers(): void {
-        this.loopAllPlayers((player: Player, playerId: string) => {
+        Player.loopMap(this.players, (player: Player, playerId: string) => {
             player.move();
             this.grid.addSpaceCandidateToOccupy(player.currentPosition, playerId);
         });
     }
 
     private calculateCollisions(): void {
-        this.loopAllPlayers((player: Player, playerId: string) => {
+        Player.loopMap(this.players, (player: Player, playerId: string) => {
             if (this.grid.isSpaceOccupied(player.currentPosition, playerId)) {
                 player.kill();
             }
@@ -58,7 +58,7 @@ export default class Arena extends Schema {
     }
 
     private flushGameStep(): void {
-        this.loopAllPlayers((player: Player) => {
+        Player.loopMap(this.players, (player: Player) => {
             this.grid.occupySpace(player.currentPosition);
             player.allowChangeDirection();
         });
@@ -66,7 +66,7 @@ export default class Arena extends Schema {
 
     private getGameStatus(): GameStatus {
         let finished = false;
-        this.loopAllPlayers((player: Player) => {
+        Player.loopMap(this.players, (player: Player) => {
             if (! player.isAlive) {
                 finished = true;
             }
@@ -74,12 +74,6 @@ export default class Arena extends Schema {
         return {
             finished,
         };
-    }
-
-    private loopAllPlayers(callback: Function): void {
-        for (let playerId of Object.keys(this.players)) {
-            callback(this.players[playerId], playerId);
-        }
     }
 
 }

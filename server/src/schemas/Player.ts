@@ -1,4 +1,4 @@
-import { Schema, type } from '@colyseus/schema';
+import { Schema, type, MapSchema } from '@colyseus/schema';
 import Coordinate from './Coordinate';
 import GenericObject from '../interfaces/GenericObject';
 
@@ -66,6 +66,12 @@ export default class Player extends Schema {
 
     public kill(): void {
         this.isAlive = false;
+    }
+
+    public static loopMap(players: MapSchema<Player>, callback: Function): void {
+        for (let playerId of Object.keys(players)) {
+            callback(players[playerId], playerId);
+        }
     }
 
     private updateCurrentPosition(newPlayerPosition: Coordinate): void {

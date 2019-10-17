@@ -1,6 +1,6 @@
 import { Schema, type } from '@colyseus/schema';
 
-export class Coordinate extends Schema {
+export default class Coordinate extends Schema {
 
     @type('number')
     public x: number;

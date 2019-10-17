@@ -1,10 +1,10 @@
 import { Schema, type, MapSchema } from '@colyseus/schema';
-import { Coordinate } from './Coordinate';
-import { Player } from './Player';
-import { TheGrid } from '../bo/TheGrid';
+import Coordinate from './Coordinate';
 import GameStatus from '../interfaces/GameStatus';
+import Player from './Player';
+import TheGrid from '../bo/TheGrid';
 
-export class Arena extends Schema {
+export default class Arena extends Schema {
 
     @type({ map: Player })
     public players = new MapSchema<Player>();

@@ -1,7 +1,7 @@
 import { Room, Client } from 'colyseus';
-import { Arena } from '../schemas/Arena';
+import Arena from '../schemas/Arena';
 
-export class GameRoom extends Room<Arena> {
+export default class GameRoom extends Room<Arena> {
     public maxClients = 2;
 
     private waitingForPlayerTwo = true;

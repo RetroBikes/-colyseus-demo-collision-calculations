@@ -2,6 +2,7 @@ import { Schema, type, MapSchema } from '@colyseus/schema';
 import { Coordinate } from './Coordinate';
 import { Player } from './Player';
 import { TheGrid } from '../bo/TheGrid';
+import GameStatus from '../interfaces/GameStatus';
 
 export class Arena extends Schema {
 
@@ -34,7 +35,7 @@ export class Arena extends Schema {
         delete this.players[playerId];
     }
 
-    public makeGameStep(): Object {
+    public makeGameStep(): GameStatus {
         this.moveAllPlayers();
         this.calculateCollisions();
         this.flushGameStep();
@@ -63,15 +64,15 @@ export class Arena extends Schema {
         });
     }
 
-    private getGameStatus(): Object {
-        let isGameFinished = false;
+    private getGameStatus(): GameStatus {
+        let finished = false;
         this.loopAllPlayers((player: Player) => {
             if (! player.isAlive) {
-                isGameFinished = true;
+                finished = true;
             }
         });
         return {
-            isGameFinished,
+            finished,
         };
     }
 

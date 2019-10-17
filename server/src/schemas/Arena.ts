@@ -34,11 +34,11 @@ export class Arena extends Schema {
         delete this.players[playerId];
     }
 
-    public makeGameStep(): void {
+    public makeGameStep(): Object {
         this.moveAllPlayers();
         this.calculateCollisions();
         this.flushGameStep();
-        // return this.getGameStatus();
+        return this.getGameStatus();
     }
 
     private moveAllPlayers(): void {
@@ -61,6 +61,18 @@ export class Arena extends Schema {
             this.grid.occupySpace(player.currentPosition);
             player.allowChangeDirection();
         });
+    }
+
+    private getGameStatus(): Object {
+        let isGameFinished = false;
+        this.loopAllPlayers((player: Player) => {
+            if (! player.isAlive) {
+                isGameFinished = true;
+            }
+        });
+        return {
+            isGameFinished,
+        };
     }
 
     private loopAllPlayers(callback: Function): void {

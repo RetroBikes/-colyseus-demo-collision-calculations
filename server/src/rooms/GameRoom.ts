@@ -35,7 +35,8 @@ export class GameRoom extends Room<Arena> {
 
     private startGame(): void {
         this.setSimulationInterval(() => {
-            this.state.makeGameStep();
+            const gameStatus = this.state.makeGameStep();
+            console.log(gameStatus);
         }, 100);
     }
 

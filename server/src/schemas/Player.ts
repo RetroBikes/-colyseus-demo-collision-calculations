@@ -1,8 +1,8 @@
 import { Schema, type } from '@colyseus/schema';
-import { Coordinate } from './Coordinate';
+import Coordinate from './Coordinate';
 import GenericObject from '../interfaces/GenericObject';
 
-export class Player extends Schema {
+export default class Player extends Schema {
 
     @type(Coordinate)
     public currentPosition: Coordinate;

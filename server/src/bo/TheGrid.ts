@@ -1,7 +1,7 @@
-import { Coordinate } from '../schemas/Coordinate';
+import Coordinate from '../schemas/Coordinate';
 import GenericObject from '../interfaces/GenericObject';
 
-export class TheGrid {
+export default class TheGrid {
 
     private gridSize: number;
 

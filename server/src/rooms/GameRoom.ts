@@ -1,7 +1,7 @@
 import { Room, Client } from 'colyseus';
-import { Arena } from '../schemas/Arena';
+import Arena from '../schemas/Arena';
 
-export class GameRoom extends Room<Arena> {
+export default class GameRoom extends Room<Arena> {
     public maxClients = 2;
 
     private waitingForPlayerTwo = true;
@@ -35,8 +35,15 @@ export class GameRoom extends Room<Arena> {
 
     private startGame(): void {
         this.setSimulationInterval(() => {
-            this.state.makeGameStep();
+            const gameStatus = this.state.makeGameStep();
+            if (gameStatus.finished) {
+                this.stopGame();
+            }
         }, 100);
+    }
+
+    private stopGame(): void {
+        this.disconnect();
     }
 
 }

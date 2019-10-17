@@ -1,9 +1,10 @@
 import { Schema, type, MapSchema } from '@colyseus/schema';
-import { Coordinate } from './Coordinate';
-import { Player } from './Player';
-import { TheGrid } from '../bo/TheGrid';
+import Coordinate from './Coordinate';
+import GameStatus from '../interfaces/GameStatus';
+import Player from './Player';
+import TheGrid from '../bo/TheGrid';
 
-export class Arena extends Schema {
+export default class Arena extends Schema {
 
     @type({ map: Player })
     public players = new MapSchema<Player>();
@@ -34,11 +35,11 @@ export class Arena extends Schema {
         delete this.players[playerId];
     }
 
-    public makeGameStep(): void {
+    public makeGameStep(): GameStatus {
         this.moveAllPlayers();
         this.calculateCollisions();
         this.flushGameStep();
-        // return this.getGameStatus();
+        return this.getGameStatus();
     }
 
     private moveAllPlayers(): void {
@@ -61,6 +62,18 @@ export class Arena extends Schema {
             this.grid.occupySpace(player.currentPosition);
             player.allowChangeDirection();
         });
+    }
+
+    private getGameStatus(): GameStatus {
+        let finished = false;
+        this.loopAllPlayers((player: Player) => {
+            if (! player.isAlive) {
+                finished = true;
+            }
+        });
+        return {
+            finished,
+        };
     }
 
     private loopAllPlayers(callback: Function): void {

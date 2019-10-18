@@ -19,7 +19,7 @@ class Game extends React.Component {
     };
   }
 
-  render () {
+  render() {
     const theme = createTheme();
     return (
       <div class="game">
@@ -36,11 +36,23 @@ class Game extends React.Component {
             </Layer>
           </Stage>
         </Frame>
+        {this.renderGameMessageOverlay()}
+      </div>
+    );
+  }
+
+  /**
+   * @todo: Create separate component for game overlay.
+   */
+  renderGameMessageOverlay() {
+    if ('' !== this.state.gameMessageOverlay) {
+      return (
         <div class="game-message-overlay">
           <Heading node='h1'>{this.state.gameMessageOverlay}</Heading>
         </div>
-      </div>
-    );
+      );
+    }
+    return '';
   }
 
   initializeGame(room) {

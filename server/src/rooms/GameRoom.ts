@@ -49,7 +49,7 @@ export default class GameRoom extends Room<Arena> {
             this.broadcast('Draw :o');
         } else {
             Player.loopMap(gameStatus.players, (player: Player) => {
-                const message = player.isAlive ? 'You won :D' : 'You lose :/';
+                const message = player.isAlive ? 'You win :D' : 'You lose :/';
                 this.send(player.getClientObject(), message);
             });
         }

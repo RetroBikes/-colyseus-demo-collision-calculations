@@ -1,5 +1,5 @@
 import React from 'react';
-import { Frame, createTheme } from 'arwes';
+import { Frame, Heading, createTheme } from 'arwes';
 import * as Colyseus from 'colyseus.js';
 import { Stage, Layer, Line } from 'react-konva';
 import './game.css';
@@ -22,20 +22,23 @@ class Game extends React.Component {
     const theme = createTheme();
     return (
       <div class="game">
-      <Frame animate={true} level={3} corners={4} layer='primary' classes="game-frame">
-        <Stage width={this.state.areaPhysicalSize} height={this.state.areaPhysicalSize}>
-          <Layer>
-            {Object.keys(this.state.players).map(playerId =>
-              <Line
-                points={this.state.players[playerId].parts}
-                stroke={theme.color.primary.dark}
-                strokeWidth={this.state.stepSize}
-              />
-            )}
-          </Layer>
-        </Stage>
-      </Frame>
-    </div>
+        <Frame animate={true} level={3} corners={4} layer='primary' classes="game-frame">
+          <Stage width={this.state.areaPhysicalSize} height={this.state.areaPhysicalSize}>
+            <Layer>
+              {Object.keys(this.state.players).map(playerId =>
+                <Line
+                  points={this.state.players[playerId].parts}
+                  stroke={theme.color.primary.dark}
+                  strokeWidth={this.state.stepSize}
+                />
+              )}
+            </Layer>
+          </Stage>
+        </Frame>
+        <div class="game-message-overlay">
+          <Heading node='h1'>MESSAGE</Heading>
+        </div>
+      </div>
     );
   }
 

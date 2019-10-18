@@ -1,5 +1,5 @@
 import React from 'react';
-import { Frame, createTheme } from 'arwes';
+import { Frame, Heading, createTheme } from 'arwes';
 import * as Colyseus from 'colyseus.js';
 import { Stage, Layer, Line } from 'react-konva';
 import './game.css';
@@ -14,32 +14,51 @@ class Game extends React.Component {
       areaVirtualSize: 0,
       stepSize: 0,
       direction: '',
+      gameMessageOverlay: '',
       players: {},
     };
   }
 
-  render () {
+  render() {
     const theme = createTheme();
     return (
       <div class="game">
-      <Frame animate={true} level={3} corners={4} layer='primary' classes="game-frame">
-        <Stage width={this.state.areaPhysicalSize} height={this.state.areaPhysicalSize}>
-          <Layer>
-            {Object.keys(this.state.players).map(playerId =>
-              <Line
-                points={this.state.players[playerId].parts}
-                stroke={theme.color.primary.dark}
-                strokeWidth={this.state.stepSize}
-              />
-            )}
-          </Layer>
-        </Stage>
-      </Frame>
-    </div>
+        <Frame animate={true} level={3} corners={4} layer='primary' classes="game-frame">
+          <Stage width={this.state.areaPhysicalSize} height={this.state.areaPhysicalSize}>
+            <Layer>
+              {Object.keys(this.state.players).map(playerId =>
+                <Line
+                  points={this.state.players[playerId].parts}
+                  stroke={theme.color.primary.dark}
+                  strokeWidth={this.state.stepSize}
+                />
+              )}
+            </Layer>
+          </Stage>
+        </Frame>
+        {this.renderGameMessageOverlay()}
+      </div>
     );
   }
 
+  /**
+   * @todo: Create separate component for game overlay.
+   */
+  renderGameMessageOverlay() {
+    if ('' !== this.state.gameMessageOverlay) {
+      return (
+        <div class="game-message-overlay">
+          <Heading node='h1'>{this.state.gameMessageOverlay}</Heading>
+        </div>
+      );
+    }
+    return '';
+  }
+
   initializeGame(room) {
+    /**
+     * Calculate game area positions and draw on the screen with Konva lib.
+     */
     const updateUserState = (player, sessionId) => {
       // Calculate the step size based on physical game area
       // size and the game virtual size setted on server.
@@ -79,6 +98,14 @@ class Game extends React.Component {
       this.setState({ players: newPlayers });
     };
 
+    /**
+     * Endgame message handling.
+     */
+    room.onMessage(message => this.setState({ gameMessageOverlay: message }));
+
+    /**
+     * Control event listener.
+     */
     window.addEventListener('keydown', event => {
       let direction = '';
       switch (event.which) {
@@ -86,9 +113,7 @@ class Game extends React.Component {
         case 39: direction = 'right'; break;
         case 40: direction = 'down'; break;
         case 37: direction = 'left'; break;
-      }
-      if ('' === direction) {
-        return;
+        default: return;
       }
       room.send({ direction: direction });
     });

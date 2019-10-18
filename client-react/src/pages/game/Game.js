@@ -40,6 +40,9 @@ class Game extends React.Component {
   }
 
   initializeGame(room) {
+    /**
+     * Calculate game area positions and draw on the screen with Konva lib.
+     */
     const updateUserState = (player, sessionId) => {
       // Calculate the step size based on physical game area
       // size and the game virtual size setted on server.
@@ -79,6 +82,14 @@ class Game extends React.Component {
       this.setState({ players: newPlayers });
     };
 
+    /**
+     * Endgame message handling.
+     */
+    room.onMessage(message => console.log(message));
+
+    /**
+     * Control event listener.
+     */
     window.addEventListener('keydown', event => {
       let direction = '';
       switch (event.which) {
@@ -86,9 +97,7 @@ class Game extends React.Component {
         case 39: direction = 'right'; break;
         case 40: direction = 'down'; break;
         case 37: direction = 'left'; break;
-      }
-      if ('' === direction) {
-        return;
+        default: return;
       }
       room.send({ direction: direction });
     });

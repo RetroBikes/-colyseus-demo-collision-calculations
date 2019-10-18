@@ -14,6 +14,7 @@ class Game extends React.Component {
       areaVirtualSize: 0,
       stepSize: 0,
       direction: '',
+      gameMessageOverlay: '',
       players: {},
     };
   }
@@ -36,7 +37,7 @@ class Game extends React.Component {
           </Stage>
         </Frame>
         <div class="game-message-overlay">
-          <Heading node='h1'>MESSAGE</Heading>
+          <Heading node='h1'>{this.state.gameMessageOverlay}</Heading>
         </div>
       </div>
     );
@@ -88,7 +89,7 @@ class Game extends React.Component {
     /**
      * Endgame message handling.
      */
-    room.onMessage(message => console.log(message));
+    room.onMessage(message => this.setState({ gameMessageOverlay: message }));
 
     /**
      * Control event listener.

@@ -3,6 +3,7 @@ import Coordinate from './Coordinate';
 import GameStatus from '../interfaces/GameStatus';
 import Player from './Player';
 import TheGrid from '../bo/TheGrid';
+import GenericObject from '../interfaces/GenericObject';
 
 export default class Arena extends Schema {
 
@@ -66,13 +67,16 @@ export default class Arena extends Schema {
 
     private getGameStatus(): GameStatus {
         let finished = false;
-        Player.loopMap(this.players, (player: Player) => {
+        const statusPlayers: GenericObject<boolean> = {};
+        Player.loopMap(this.players, (player: Player, playerId: string) => {
             if (! player.isAlive) {
                 finished = true;
             }
+            statusPlayers[playerId] = player.isAlive;
         });
         return {
             finished,
+            statusPlayers,
         };
     }
 

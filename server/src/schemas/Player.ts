@@ -1,6 +1,7 @@
 import { Schema, type, MapSchema } from '@colyseus/schema';
 import Coordinate from './Coordinate';
 import GenericObject from '../interfaces/GenericObject';
+import { Client } from 'colyseus';
 
 export default class Player extends Schema {
 
@@ -13,6 +14,8 @@ export default class Player extends Schema {
     @type('boolean')
     public isAlive = true;
 
+    private clientObject: Client;
+
     private canChangeDirection = true;
 
     private oppositeDirections: GenericObject<string> = {
@@ -22,8 +25,9 @@ export default class Player extends Schema {
         left: 'right',
     };
 
-    public constructor(startPosition: Coordinate, initialDirection = 'right') {
+    public constructor(client: Client, startPosition: Coordinate, initialDirection = 'right') {
         super();
+        this.clientObject = client;
         this.direction = initialDirection;
         this.currentPosition = startPosition
     }
@@ -66,6 +70,10 @@ export default class Player extends Schema {
 
     public kill(): void {
         this.isAlive = false;
+    }
+
+    public getClientObject(): Client {
+        return this.clientObject;
     }
 
     public static loopMap(players: MapSchema<Player>, callback: Function): void {

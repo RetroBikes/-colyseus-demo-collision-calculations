@@ -1,5 +1,6 @@
 import { Room, Client } from 'colyseus';
 import Arena from '../schemas/Arena';
+import GameStatus from '../interfaces/GameStatus';
 
 export default class GameRoom extends Room<Arena> {
     public maxClients = 2;
@@ -13,7 +14,7 @@ export default class GameRoom extends Room<Arena> {
     }
 
     public onJoin(client: Client): void {
-        this.state.createPlayer(client.sessionId, this.waitingForPlayerTwo);
+        this.state.createPlayer(client, this.waitingForPlayerTwo);
         if (! this.waitingForPlayerTwo) {
             this.startGame();
         }

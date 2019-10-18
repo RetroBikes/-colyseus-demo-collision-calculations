@@ -69,18 +69,16 @@ export default class Arena extends Schema {
     private getGameStatus(): GameStatus {
         let finished = false,
             isDraw = true;
-        const statusPlayers: GenericObject<boolean> = {};
         Player.loopMap(this.players, (player: Player, playerId: string) => {
             if (! player.isAlive) {
                 finished = true;
             }
             isDraw = isDraw && ! player.isAlive;
-            statusPlayers[playerId] = player.isAlive;
         });
         return {
             finished,
             isDraw,
-            statusPlayers,
+            players: this.players,
         };
     }
 

@@ -15,9 +15,9 @@ export default class GameRoom extends Room<Arena> {
     }
 
     public onJoin(client: Client): void {
-        //
         this.state.createPlayer(client, this.waitingForPlayerTwo);
-        if (! this.waitingForPlayerTwo) {
+        const roomOccupied = this.maxClients <= this.clients.length + 1;
+        if (roomOccupied) {
             this.startGame();
         }
         this.waitingForPlayerTwo = false;

@@ -3,7 +3,6 @@ import Coordinate from './Coordinate';
 import GameStatus from '../interfaces/GameStatus';
 import Player from './Player';
 import TheGrid from '../bo/TheGrid';
-import GenericObject from '../interfaces/GenericObject';
 import { Client } from 'colyseus';
 
 export default class Arena extends Schema {
@@ -12,12 +11,15 @@ export default class Arena extends Schema {
     public players = new MapSchema<Player>();
 
     @type('number')
-    public areaVirtualSize = 150;
+    public areaVirtualSize: number = 150;
+
+    private playersNumberToStart: number;
 
     private grid: TheGrid;
 
-    public constructor() {
+    public constructor(playersNumberToStart: number) {
         super();
+        this.playersNumberToStart = playersNumberToStart;
         this.grid = new TheGrid(this.areaVirtualSize);
     }
 
@@ -69,7 +71,7 @@ export default class Arena extends Schema {
     private getGameStatus(): GameStatus {
         let finished = false,
             isDraw = true;
-        Player.loopMap(this.players, (player: Player, playerId: string) => {
+        Player.loopMap(this.players, (player: Player) => {
             if (! player.isAlive) {
                 finished = true;
             }

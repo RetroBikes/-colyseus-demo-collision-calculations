@@ -4,17 +4,18 @@ import GameStatus from '../interfaces/GameStatus';
 import Player from '../schemas/Player';
 
 export default class GameRoom extends Room<Arena> {
-    public maxClients = 2;
 
-    private waitingForPlayerTwo = true;
+    public maxClients: number = 2;
+
+    private waitingForPlayerTwo: boolean = true;
 
     public onCreate(options: any): void {
         console.log('StateHandlerRoom created!', options);
-
-        this.setState(new Arena());
+        this.setState(new Arena(this.maxClients));
     }
 
     public onJoin(client: Client): void {
+        //
         this.state.createPlayer(client, this.waitingForPlayerTwo);
         if (! this.waitingForPlayerTwo) {
             this.startGame();

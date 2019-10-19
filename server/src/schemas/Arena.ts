@@ -84,14 +84,18 @@ export default class Arena extends Schema {
     }
 
     private getGameStatus(): GameStatus {
-        let finished = false,
+        let playersAlive = 0,
+            finished = false,
             isDraw = true;
         Player.loopMap(this.players, (player: Player) => {
-            if (! player.isAlive) {
-                finished = true;
+            if (player.isAlive) {
+                playersAlive++;
             }
             isDraw = isDraw && ! player.isAlive;
         });
+        if (1 >= playersAlive) {
+            finished = true;
+        }
         return {
             finished,
             isDraw,

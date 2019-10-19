@@ -1,9 +1,10 @@
+import { Client } from 'colyseus';
 import { Schema, type, MapSchema } from '@colyseus/schema';
 import Coordinate from './Coordinate';
 import GameStatus from '../interfaces/GameStatus';
+import PlayerInitialState from '../interfaces/PlayerInitialState';
 import Player from './Player';
 import TheGrid from '../bo/TheGrid';
-import { Client } from 'colyseus';
 
 export default class Arena extends Schema {
 
@@ -15,7 +16,7 @@ export default class Arena extends Schema {
 
     private grid: TheGrid;
 
-    private initialPlayersState = [
+    private playersInitialState: Array<PlayerInitialState> = [
         {
             startPosition: new Coordinate(10, 10),
             initialDirection: 'right',
@@ -40,11 +41,9 @@ export default class Arena extends Schema {
     }
 
     public createPlayer(client: Client, clientNumber: number): void {
-        const initialState = this.initialPlayersState[clientNumber - 1],
-            startPosition = initialState.startPosition,
-            initialDirection = initialState.initialDirection;
-        this.players[client.sessionId] = new Player(client, startPosition, initialDirection);
-        this.grid.occupySpace(startPosition);
+        const initialState = this.playersInitialState[clientNumber - 1];
+        this.players[client.sessionId] = new Player(client, initialState);
+        this.grid.occupySpace(initialState.startPosition);
     }
 
     public changePlayerDirection(playerId: string, direction: string): void {

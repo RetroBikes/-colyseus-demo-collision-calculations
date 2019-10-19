@@ -1,7 +1,8 @@
+import { Client } from 'colyseus';
 import { Schema, type, MapSchema } from '@colyseus/schema';
 import Coordinate from './Coordinate';
 import GenericObject from '../interfaces/GenericObject';
-import { Client } from 'colyseus';
+import PlayerInitialState from '../interfaces/PlayerInitialState';
 
 export default class Player extends Schema {
 
@@ -25,11 +26,11 @@ export default class Player extends Schema {
         left: 'right',
     };
 
-    public constructor(client: Client, startPosition: Coordinate, initialDirection = 'right') {
+    public constructor(client: Client, initialState: PlayerInitialState) {
         super();
         this.clientObject = client;
-        this.direction = initialDirection;
-        this.currentPosition = startPosition
+        this.direction = initialState.initialDirection;
+        this.currentPosition = initialState.startPosition;
     }
 
     public changeDirection(direction: string): void {

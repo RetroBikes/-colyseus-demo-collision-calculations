@@ -13,22 +13,38 @@ export default class Arena extends Schema {
     @type('number')
     public areaVirtualSize: number = 150;
 
-    private playersNumberToStart: number;
-
     private grid: TheGrid;
 
-    public constructor(playersNumberToStart: number) {
+    private initialPlayersState = [
+        {
+            startPosition: new Coordinate(10, 10),
+            initialDirection: 'right',
+        },
+        {
+            startPosition: new Coordinate(this.areaVirtualSize - 10, this.areaVirtualSize - 10),
+            initialDirection: 'left',
+        },
+        {
+            startPosition: new Coordinate(this.areaVirtualSize - 10, 10),
+            initialDirection: 'down',
+        },
+        {
+            startPosition: new Coordinate(10, this.areaVirtualSize - 10),
+            initialDirection: 'up',
+        },
+    ];
+
+    public constructor() {
         super();
-        this.playersNumberToStart = playersNumberToStart;
         this.grid = new TheGrid(this.areaVirtualSize);
     }
 
-    public createPlayer(client: Client, isPlayerOne: boolean): void {
-        const startCoordinate = isPlayerOne ?
-            new Coordinate(10, 10) :
-            new Coordinate(this.areaVirtualSize - 10, this.areaVirtualSize - 10);
-        this.players[client.sessionId] = new Player(client, startCoordinate, isPlayerOne ? 'right' : 'left');
-        this.grid.occupySpace(startCoordinate);
+    public createPlayer(client: Client, clientNumber: number): void {
+        const initialState = this.initialPlayersState[clientNumber - 1],
+            startPosition = initialState.startPosition,
+            initialDirection = initialState.initialDirection;
+        this.players[client.sessionId] = new Player(client, startPosition, initialDirection);
+        this.grid.occupySpace(startPosition);
     }
 
     public changePlayerDirection(playerId: string, direction: string): void {

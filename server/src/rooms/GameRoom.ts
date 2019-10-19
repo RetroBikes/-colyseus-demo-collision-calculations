@@ -7,20 +7,18 @@ export default class GameRoom extends Room<Arena> {
 
     public maxClients: number = 2;
 
-    private waitingForPlayerTwo: boolean = true;
-
     public onCreate(options: any): void {
         console.log('StateHandlerRoom created!', options);
-        this.setState(new Arena(this.maxClients));
+        this.setState(new Arena());
     }
 
     public onJoin(client: Client): void {
-        this.state.createPlayer(client, this.waitingForPlayerTwo);
-        const roomOccupied = this.maxClients <= this.clients.length + 1;
+        const clientNumber = this.clients.length + 1,
+            roomOccupied = this.maxClients <= this.clients.length + 1;
+        this.state.createPlayer(client, clientNumber);
         if (roomOccupied) {
             this.startGame();
         }
-        this.waitingForPlayerTwo = false;
     }
 
     public onLeave(client: Client): void {

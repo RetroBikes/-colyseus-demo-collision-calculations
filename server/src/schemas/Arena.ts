@@ -57,8 +57,9 @@ export default class Arena extends Schema {
     public makeGameStep(): GameStatus {
         this.moveAllPlayers();
         this.calculateCollisions();
+        const gameStatus = this.getGameStatus();
         this.flushGameStep();
-        return this.getGameStatus();
+        return gameStatus;
     }
 
     private moveAllPlayers(): void {
@@ -78,6 +79,7 @@ export default class Arena extends Schema {
 
     private flushGameStep(): void {
         Player.loopMap(this.players, (player: Player) => {
+            // IF ONE PLAYER LOSE, REMOVE FROM MAP.
             this.grid.occupySpace(player.currentPosition);
             player.allowChangeDirection();
         });

@@ -40,6 +40,7 @@ export default class GameRoom extends Room<Arena> {
             if (gameStatus.finished) {
                 this.stopGame(gameStatus);
             }
+            // IF THE GAME IS NOT FINISHED BUT ONE PLAYER LOSE, SEND MESSAGE AND DISCONNECT ONLY HIM.
         }, 100);
     }
 

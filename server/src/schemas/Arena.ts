@@ -79,9 +79,12 @@ export default class Arena extends Schema {
 
     private flushGameStep(): void {
         Player.loopMap(this.players, (player: Player, playerId: string) => {
-            // IF ONE PLAYER LOSE, REMOVE FROM MAP.
-            this.grid.occupySpace(player.currentPosition, playerId);
-            player.allowChangeDirection();
+            if (player.isAlive) {
+                this.grid.occupySpace(player.currentPosition, playerId);
+                player.allowChangeDirection();
+            } else {
+                delete this.players[playerId];
+            }
         });
     }
 

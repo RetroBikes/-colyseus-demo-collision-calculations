@@ -50,6 +50,16 @@ export default class TheGrid {
         return '' !== this.gridItems[spaceCoordinate.x][spaceCoordinate.y];
     }
 
+    public freeAllPlayerSpaces(playerId: string): void {
+        for (let xCoordinate in this.gridItems) {
+            for (let yCoordinate in this.gridItems[xCoordinate]) {
+                if (playerId === this.gridItems[xCoordinate][yCoordinate]) {
+                    this.gridItems[xCoordinate][yCoordinate] = '';
+                }
+            }
+        }
+    }
+
     private spaceExists(spaceCoordinate: Coordinate): boolean {
         return 0 <= spaceCoordinate.x && this.gridSize > spaceCoordinate.x &&
             0 <= spaceCoordinate.y && this.gridSize > spaceCoordinate.y;

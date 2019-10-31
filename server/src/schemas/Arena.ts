@@ -52,6 +52,7 @@ export default class Arena extends Schema {
 
     public removePlayer(playerId: string): void {
         delete this.players[playerId];
+        this.grid.freeAllPlayerSpaces(playerId);
     }
 
     public makeGameStep(): GameStatus {
@@ -83,7 +84,7 @@ export default class Arena extends Schema {
                 this.grid.occupySpace(player.currentPosition, playerId);
                 player.allowChangeDirection();
             } else {
-                delete this.players[playerId];
+                this.removePlayer(playerId);
             }
         });
     }

@@ -43,7 +43,7 @@ export default class Arena extends Schema {
     public createPlayer(client: Client, clientNumber: number): void {
         const initialState = this.playersInitialState[clientNumber - 1];
         this.players[client.sessionId] = new Player(client, initialState);
-        this.grid.occupySpace(initialState.startPosition);
+        this.grid.occupySpace(initialState.startPosition, client.sessionId);
     }
 
     public changePlayerDirection(playerId: string, direction: string): void {
@@ -78,9 +78,9 @@ export default class Arena extends Schema {
     }
 
     private flushGameStep(): void {
-        Player.loopMap(this.players, (player: Player) => {
+        Player.loopMap(this.players, (player: Player, playerId: string) => {
             // IF ONE PLAYER LOSE, REMOVE FROM MAP.
-            this.grid.occupySpace(player.currentPosition);
+            this.grid.occupySpace(player.currentPosition, playerId);
             player.allowChangeDirection();
         });
     }

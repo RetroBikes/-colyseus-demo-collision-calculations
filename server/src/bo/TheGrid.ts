@@ -5,15 +5,15 @@ export default class TheGrid {
 
     private gridSize: number;
 
-    private gridItems: Array<Array<boolean>>;
+    private gridItems: Array<Array<string>>;
 
     private spacesCandidatesToOccupy: GenericObject<Coordinate>;
 
     public constructor(gridSize: number) {
         this.gridSize = gridSize;
-        let emptyLine = new Array<boolean>((gridSize));
-        emptyLine = Array.from(emptyLine, () => false);
-        this.gridItems = new Array<Array<boolean>>(gridSize);
+        let emptyLine = new Array<string>((gridSize));
+        emptyLine = Array.from(emptyLine, () => '');
+        this.gridItems = new Array<Array<string>>(gridSize);
         this.gridItems = Array.from(this.gridItems, () => emptyLine.slice());
         this.spacesCandidatesToOccupy = {};
     }
@@ -25,11 +25,11 @@ export default class TheGrid {
         this.spacesCandidatesToOccupy[playerId] = new Coordinate(spaceCoordinate.x, spaceCoordinate.y);
     }
 
-    public occupySpace(spaceCoordinate: Coordinate): void {
+    public occupySpace(spaceCoordinate: Coordinate, playerId: string): void {
         if (! this.spaceExists(spaceCoordinate)) {
             return;
         }
-        this.gridItems[spaceCoordinate.x][spaceCoordinate.y] = true;
+        this.gridItems[spaceCoordinate.x][spaceCoordinate.y] = playerId;
     }
 
     public isSpaceOccupied(spaceCoordinate: Coordinate, playerId: string): boolean {
@@ -47,7 +47,7 @@ export default class TheGrid {
             }
         }
         // If will crash on opponent trail.
-        return this.gridItems[spaceCoordinate.x][spaceCoordinate.y];
+        return '' !== this.gridItems[spaceCoordinate.x][spaceCoordinate.y];
     }
 
     private spaceExists(spaceCoordinate: Coordinate): boolean {

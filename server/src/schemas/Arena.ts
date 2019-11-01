@@ -46,21 +46,30 @@ export default class Arena extends Schema {
         this.grid.occupySpace(initialState.startPosition, client.sessionId);
     }
 
-    public changePlayerDirection(playerId: string, direction: string): void {
-        this.players[playerId].changeDirection(direction);
-    }
-
     public removePlayer(playerId: string): void {
         delete this.players[playerId];
         this.grid.freeAllPlayerSpaces(playerId);
     }
 
+    public changePlayerDirection(playerId: string, direction: string): void {
+        this.players[playerId].changeDirection(direction);
+    }
+
     public makeGameStep(): GameStatus {
         this.moveAllPlayers();
         this.calculateCollisions();
-        const gameStatus = this.getGameStatus();
-        this.flushGameStep();
-        return gameStatus;
+        return this.getGameStatus();
+    }
+
+    public flushGameStep(): void {
+        Player.loopMap(this.players, (player: Player, playerId: string) => {
+            if (player.isAlive) {
+                this.grid.occupySpace(player.currentPosition, playerId);
+                player.allowChangeDirection();
+            } else {
+                this.removePlayer(playerId);
+            }
+        });
     }
 
     private moveAllPlayers(): void {
@@ -74,17 +83,6 @@ export default class Arena extends Schema {
         Player.loopMap(this.players, (player: Player, playerId: string) => {
             if (this.grid.isSpaceOccupied(player.currentPosition, playerId)) {
                 player.kill();
-            }
-        });
-    }
-
-    private flushGameStep(): void {
-        Player.loopMap(this.players, (player: Player, playerId: string) => {
-            if (player.isAlive) {
-                this.grid.occupySpace(player.currentPosition, playerId);
-                player.allowChangeDirection();
-            } else {
-                this.removePlayer(playerId);
             }
         });
     }

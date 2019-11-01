@@ -39,8 +39,14 @@ export default class GameRoom extends Room<Arena> {
             const gameStatus = this.state.makeGameStep();
             if (gameStatus.finished) {
                 this.stopGame(gameStatus);
+            } else {
+                Player.loopMap(gameStatus.players, (player: Player) => {
+                    if (! player.isAlive) {
+                        this.send(player.getClientObject(), 'You lose :/');
+                    }
+                });
             }
-            // IF THE GAME IS NOT FINISHED BUT ONE PLAYER LOSE, SEND MESSAGE AND DISCONNECT ONLY HIM.
+            this.state.flushGameStep();
         }, 100);
     }
 

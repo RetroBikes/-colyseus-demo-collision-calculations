@@ -16,29 +16,14 @@ export default class Arena extends Schema {
 
     private grid: TheGrid;
 
-    private playersInitialState: Array<PlayerInitialState> = [
-        {
-            startPosition: new Coordinate(10, 10),
-            initialDirection: 'right',
-        },
-        {
-            startPosition: new Coordinate(this.areaVirtualSize - 10, this.areaVirtualSize - 10),
-            initialDirection: 'left',
-        },
-        {
-            startPosition: new Coordinate(this.areaVirtualSize - 10, 10),
-            initialDirection: 'down',
-        },
-        {
-            startPosition: new Coordinate(10, this.areaVirtualSize - 10),
-            initialDirection: 'up',
-        },
-    ];
+    private playersInitialState: Array<PlayerInitialState>;
 
-    public constructor(areaVirtualSize: number) {
+    public constructor(areaVirtualSize: number, initialStates: Array<PlayerInitialState>) {
         super();
         this.areaVirtualSize = areaVirtualSize;
         this.grid = new TheGrid(areaVirtualSize);
+        this.playersInitialState = initialStates;
+        this.formatPlayersInitialState();
     }
 
     public createPlayer(client: Client, clientNumber: number): void {
@@ -76,6 +61,20 @@ export default class Arena extends Schema {
             } else {
                 this.removePlayer(playerId);
             }
+        });
+    }
+
+    private formatPlayersInitialState(): void {
+        this.playersInitialState = this.playersInitialState.map(state => {
+            return {
+                startPosition: new Coordinate(
+                    0 <= state.startPosition.x ? state.startPosition.x :
+                        this.areaVirtualSize - Math.abs(state.startPosition.x),
+                    0 <= state.startPosition.y ? state.startPosition.y :
+                        this.areaVirtualSize - Math.abs(state.startPosition.y)
+                ),
+                initialDirection: state.initialDirection,
+            };
         });
     }
 

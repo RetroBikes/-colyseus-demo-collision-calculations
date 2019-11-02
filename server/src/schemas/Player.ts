@@ -1,5 +1,5 @@
 import { Client } from 'colyseus';
-import { Schema, type, MapSchema } from '@colyseus/schema';
+import { MapSchema, Schema, type } from '@colyseus/schema';
 import Coordinate from './Coordinate';
 import GenericObject from '../interfaces/GenericObject';
 import PlayerInitialState from '../interfaces/PlayerInitialState';

@@ -1,10 +1,10 @@
 import { Client } from 'colyseus';
-import { Schema, type, MapSchema } from '@colyseus/schema';
+import { MapSchema, Schema, type } from '@colyseus/schema';
 import Coordinate from './Coordinate';
 import GameConfig from '../interfaces/GameConfig';
 import GameStatus from '../interfaces/GameStatus';
-import PlayerInitialState from '../interfaces/PlayerInitialState';
 import Player from './Player';
+import PlayerInitialState from '../interfaces/PlayerInitialState';
 import TheGrid from '../bo/TheGrid';
 
 export default class Arena extends Schema {
@@ -22,9 +22,9 @@ export default class Arena extends Schema {
     public constructor(gameconfig: GameConfig) {
         super();
         this.areaVirtualSize = gameconfig.areaVirtualSize;
-        this.grid = new TheGrid(gameconfig.areaVirtualSize);
         this.playersInitialState = gameconfig.initialStates;
         this.formatPlayersInitialState();
+        this.grid = new TheGrid(gameconfig.areaVirtualSize);
     }
 
     public createPlayer(client: Client, clientNumber: number): void {

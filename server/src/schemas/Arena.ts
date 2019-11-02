@@ -47,11 +47,17 @@ export default class Arena extends Schema {
     }
 
     public removePlayer(playerId: string): void {
+        if ('undefined' === typeof this.players[playerId]) {
+            return;
+        }
         delete this.players[playerId];
         this.grid.freeAllPlayerSpaces(playerId);
     }
 
     public changePlayerDirection(playerId: string, direction: string): void {
+        if ('undefined' === typeof this.players[playerId]) {
+            return;
+        }
         this.players[playerId].changeDirection(direction);
     }
 

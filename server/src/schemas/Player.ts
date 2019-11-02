@@ -78,7 +78,7 @@ export default class Player extends Schema {
     }
 
     public static loopMap(players: MapSchema<Player>, callback: Function): void {
-        for (let playerId of Object.keys(players)) {
+        for (let playerId in players) {
             callback(players[playerId], playerId);
         }
     }

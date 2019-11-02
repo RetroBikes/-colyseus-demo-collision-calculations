@@ -12,8 +12,9 @@ export default class GameRoom extends Room<Arena> {
     public onCreate(options: any): void {
         console.log('StateHandlerRoom created!', options);
         this.setState(new Arena());
-        const gameconfig = new Configurations('gameconfig.json');
-        console.log('jsondata', gameconfig.getJsonData());
+        const gameconfigdata = new Configurations('gameconfig.json'),
+            gameconfig = gameconfigdata.getJsonData();
+        this.maxClients = gameconfig.clientsToPlay;
     }
 
     public onJoin(client: Client): void {

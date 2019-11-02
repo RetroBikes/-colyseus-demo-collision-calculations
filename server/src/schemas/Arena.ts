@@ -35,9 +35,10 @@ export default class Arena extends Schema {
         },
     ];
 
-    public constructor() {
+    public constructor(areaVirtualSize: number) {
         super();
-        this.grid = new TheGrid(this.areaVirtualSize);
+        this.areaVirtualSize = areaVirtualSize;
+        this.grid = new TheGrid(areaVirtualSize);
     }
 
     public createPlayer(client: Client, clientNumber: number): void {

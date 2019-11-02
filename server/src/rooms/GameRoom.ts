@@ -1,16 +1,19 @@
 import { MapSchema } from '@colyseus/schema';
 import { Room, Client } from 'colyseus';
 import Arena from '../schemas/Arena';
+import Configurations from '../bo/Configurations';
 import GameStatus from '../interfaces/GameStatus';
 import Player from '../schemas/Player';
 
 export default class GameRoom extends Room<Arena> {
 
-    public maxClients: number = 3;
+    public maxClients: number = 2;
 
     public onCreate(options: any): void {
         console.log('StateHandlerRoom created!', options);
         this.setState(new Arena());
+        const gameconfig = new Configurations('gameconfig.json');
+        console.log('jsondata', gameconfig.getJsonData());
     }
 
     public onJoin(client: Client): void {

@@ -14,7 +14,7 @@ export default class GameRoom extends Room<Arena> {
         const gameconfigdata = new Configurations('gameconfig.json'),
             gameconfig = gameconfigdata.getJsonData();
         this.maxClients = gameconfig.clientsToPlay;
-        this.setState(new Arena(gameconfig.areaVirtualSize, gameconfig.initialStates));
+        this.setState(new Arena(gameconfig));
     }
 
     public onJoin(client: Client): void {

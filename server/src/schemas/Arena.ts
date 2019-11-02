@@ -1,6 +1,7 @@
 import { Client } from 'colyseus';
 import { Schema, type, MapSchema } from '@colyseus/schema';
 import Coordinate from './Coordinate';
+import GameConfig from '../interfaces/GameConfig';
 import GameStatus from '../interfaces/GameStatus';
 import PlayerInitialState from '../interfaces/PlayerInitialState';
 import Player from './Player';
@@ -18,11 +19,11 @@ export default class Arena extends Schema {
 
     private playersInitialState: Array<PlayerInitialState>;
 
-    public constructor(areaVirtualSize: number, initialStates: Array<PlayerInitialState>) {
+    public constructor(gameconfig: GameConfig) {
         super();
-        this.areaVirtualSize = areaVirtualSize;
-        this.grid = new TheGrid(areaVirtualSize);
-        this.playersInitialState = initialStates;
+        this.areaVirtualSize = gameconfig.areaVirtualSize;
+        this.grid = new TheGrid(gameconfig.areaVirtualSize);
+        this.playersInitialState = gameconfig.initialStates;
         this.formatPlayersInitialState();
     }
 

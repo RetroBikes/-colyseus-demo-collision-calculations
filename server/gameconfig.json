@@ -1,32 +1,18 @@
 {
-    "clientsToPlay": 4,
-    "areaVirtualSize": 150,
+    "clientsToPlay": 2,
+    "areaVirtualSize": 100,
     "initialStates": [
         {
             "startPosition": {
-                "x": 10,
-                "y": 10
+                "x": 49,
+                "y": -20
             },
-            "initialDirection": "right"
+            "initialDirection": "up"
         },
         {
             "startPosition": {
-                "x": -10,
-                "y": -10
-            },
-            "initialDirection": "left"
-        },
-        {
-            "startPosition": {
-                "x": -10,
-                "y": 10
-            },
-            "initialDirection": "down"
-        },
-        {
-            "startPosition": {
-                "x": 10,
-                "y": -10
+                "x": 51,
+                "y": -20
             },
             "initialDirection": "up"
         }

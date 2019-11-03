@@ -72,13 +72,21 @@ Gameconfig file example, this considers four players, starting on each corner of
 }
 ```
 
+## The client / server communication
+All the heavy logics happen in the server side. The game loop, player steps, collision calculation and goes on. The client side is the simpliest thing possible, just receives the last players virtual location (confused? check the below section) to render on the screen and send the movement events to server. Just like this, thanks to [Colyseus](https://colyseus.io/) for this amazing framework :D.
+
+The react client uses Konva, wich makes more easy to make all the client rendering. The only things that deserves more attention is the calculus behind the sizes and positions on the physical game area. See the section belor for more.
+
 ## Going into the mathinery (hahaha I'm sorry)
 This game works with virtual and physical sizes and locations. This means the server deal only with integer numbers starting with zero and ending with the game area size minus 1 (basic array setting). The client side will have to make all the calculus to place all the stuff in the right places, as the examples below:
 
-This calculate  
-*stepSize = physical area size / virtual area size*
+This calculate the item size (added to game on each step made)  
+*__item size = physical area size / virtual area size__*
 
-*physical position (x or y) = virtual position (x or y) * stepSize*
+This calcullate the physical position (x and y) to render each player part  
+*__physical position (x or y) = virtual position (x or y) * stepSize__*
+
+Do not worry, there is an pratical example on client-react directory. [Just click here to reach it](https://github.com/RetroBikes/demo/blob/master/client-react/src/pages/game/Game.js).
 
  
 ## Powered by

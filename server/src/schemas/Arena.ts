@@ -34,24 +34,24 @@ export default class Arena extends Schema {
     }
 
     public removePlayer(playerId: string): void {
-        if ('undefined' === typeof this.players[playerId]) {
+        if (! this.playerExists(playerId)) {
             return;
         }
         delete this.players[playerId];
         this.grid.freeAllPlayerSpaces(playerId);
     }
 
+    public changePlayerDirection(playerId: string, direction: string): void {
+        if (! this.playerExists(playerId)) {
+            return;
+        }
+        this.players[playerId].changeDirection(direction);
+    }
+
     public refreshAllPlayersPositions(): void {
         Player.loopMap(this.players, (player: Player) => {
             player.refreshCurrentPosition();
         });
-    }
-
-    public changePlayerDirection(playerId: string, direction: string): void {
-        if ('undefined' === typeof this.players[playerId]) {
-            return;
-        }
-        this.players[playerId].changeDirection(direction);
     }
 
     public makeGameStep(): GameStatus {
@@ -118,6 +118,10 @@ export default class Arena extends Schema {
             isDraw,
             players: this.players,
         };
+    }
+
+    private playerExists(playerId: string): boolean {
+        return 'undefined' !== typeof this.players[playerId];
     }
 
 }

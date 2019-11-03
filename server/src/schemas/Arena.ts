@@ -41,6 +41,12 @@ export default class Arena extends Schema {
         this.grid.freeAllPlayerSpaces(playerId);
     }
 
+    public refreshAllPlayersPositions(): void {
+        Player.loopMap(this.players, (player: Player) => {
+            player.refreshCurrentPosition();
+        });
+    }
+
     public changePlayerDirection(playerId: string, direction: string): void {
         if ('undefined' === typeof this.players[playerId]) {
             return;

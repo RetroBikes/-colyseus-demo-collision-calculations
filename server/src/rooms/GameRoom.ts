@@ -40,6 +40,7 @@ export default class GameRoom extends Room<Arena> {
     }
 
     private startGame(): void {
+        this.state.refreshAllPlayersPositions();
         this.setSimulationInterval(() => {
             const gameStatus = this.state.makeGameStep();
             if (gameStatus.finished) {

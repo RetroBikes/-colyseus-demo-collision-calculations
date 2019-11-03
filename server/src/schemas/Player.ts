@@ -33,6 +33,13 @@ export default class Player extends Schema {
         this.currentPosition = initialState.startPosition;
     }
 
+    public refreshCurrentPosition(): void {
+        this.currentPosition = new Coordinate(
+            this.currentPosition.x,
+            this.currentPosition.y,
+        );
+    }
+
     public changeDirection(direction: string): void {
         if (! this.canChangeDirection ||
             this.direction === this.oppositeDirections[direction]) {

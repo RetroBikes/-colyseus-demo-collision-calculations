@@ -1,10 +1,15 @@
 ![RetroBikes demo](https://avatars3.githubusercontent.com/u/54962401?s=150)
 # RetroBikes demo
-Repository created to research and development of the game general rules.
+Research and development of the game general game rules.
 
-## Project status
-Currently in demo III research and developing, involves the collision calculations and endgame conditions.
+## Overview
+By now this game supports a multiplayer game with n players (you can define this on gameconfig file, see the 'Gameconfig quick reference' section for more).
 
+When the number of players enter in the game room the game will start immediately.
+
+As the players loses the game his occuped area will be freed, but the player still can watch the rest of game.
+
+Because this still is a demo, all the visuals are very simple, as the fact the only forms to identify yourself is try to change direction (and risk lose the game), but this is a good start to build all this things.
 
 ## Kickstart the code
  * Do the clone: `https://github.com/RetroBikes/demo.git`
@@ -16,6 +21,56 @@ Currently in demo III research and developing, involves the collision calculatio
    * `cd demo/client-react`
    * `yarn install`
    * `yarn start`
+
+## Gameconfig quick reference
+This file will set the initial state / scenery for your game. It define all this stuff:
+   * The clients number to start the game;
+   * the virtual area size (a.k.a the area size based on the number of steps);
+   * the initial players states, as the start position and direction.
+
+On start positions, negative values means counting from right (on x axis) or bottom (on y axis). Just like an Python array.
+
+This would a great place to set the players default colors, by example.
+
+__The array on initialStates can't have minus items than clientsToPlay number or the server will break by the initial states information lack__
+
+Gameconfig file example, this considers four players, starting on each corner of the game area:
+```json
+{
+    "clientsToPlay": 4,
+    "areaVirtualSize": 150,
+    "initialStates": [
+        {
+            "startPosition": {
+                "x": 10,
+                "y": 10
+            },
+            "initialDirection": "right"
+        },
+        {
+            "startPosition": {
+                "x": -10,
+                "y": -10
+            },
+            "initialDirection": "left"
+        },
+        {
+            "startPosition": {
+                "x": -10,
+                "y": 10
+            },
+            "initialDirection": "down"
+        },
+        {
+            "startPosition": {
+                "x": 10,
+                "y": -10
+            },
+            "initialDirection": "up"
+        }
+    ]
+}
+```
  
  ## Powered by
   * [Colyseus multiplayer game framework](https://colyseus.io/) - make the hard calculations on the server and handle events on the client

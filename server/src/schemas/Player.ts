@@ -1,7 +1,8 @@
-import { Schema, type, MapSchema } from '@colyseus/schema';
+import { Client } from 'colyseus';
+import { MapSchema, Schema, type } from '@colyseus/schema';
 import Coordinate from './Coordinate';
 import GenericObject from '../interfaces/GenericObject';
-import { Client } from 'colyseus';
+import PlayerInitialState from '../interfaces/PlayerInitialState';
 
 export default class Player extends Schema {
 
@@ -25,11 +26,18 @@ export default class Player extends Schema {
         left: 'right',
     };
 
-    public constructor(client: Client, startPosition: Coordinate, initialDirection = 'right') {
+    public constructor(client: Client, initialState: PlayerInitialState) {
         super();
         this.clientObject = client;
-        this.direction = initialDirection;
-        this.currentPosition = startPosition
+        this.direction = initialState.initialDirection;
+        this.currentPosition = initialState.startPosition;
+    }
+
+    public refreshCurrentPosition(): void {
+        this.currentPosition = new Coordinate(
+            this.currentPosition.x,
+            this.currentPosition.y,
+        );
     }
 
     public changeDirection(direction: string): void {
@@ -77,7 +85,7 @@ export default class Player extends Schema {
     }
 
     public static loopMap(players: MapSchema<Player>, callback: Function): void {
-        for (let playerId of Object.keys(players)) {
+        for (let playerId in players) {
             callback(players[playerId], playerId);
         }
     }

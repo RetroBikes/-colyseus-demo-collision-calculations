@@ -1,25 +1,29 @@
-import { Room, Client } from 'colyseus';
+import { MapSchema } from '@colyseus/schema';
+import { Client, Room } from 'colyseus';
 import Arena from '../schemas/Arena';
+import Configurations from '../bo/Configurations';
 import GameStatus from '../interfaces/GameStatus';
 import Player from '../schemas/Player';
 
 export default class GameRoom extends Room<Arena> {
-    public maxClients = 2;
 
-    private waitingForPlayerTwo = true;
+    public maxClients: number = 2;
 
     public onCreate(options: any): void {
+        const gameconfigdata = new Configurations('gameconfig.json'),
+            gameconfig = gameconfigdata.getJsonData();
+        this.maxClients = gameconfig.clientsToPlay;
+        this.setState(new Arena(gameconfig));
         console.log('StateHandlerRoom created!', options);
-
-        this.setState(new Arena());
     }
 
     public onJoin(client: Client): void {
-        this.state.createPlayer(client, this.waitingForPlayerTwo);
-        if (! this.waitingForPlayerTwo) {
+        const clientNumber = this.clients.length + 1,
+            roomOccupied = this.maxClients <= this.clients.length + 1;
+        this.state.createPlayer(client, clientNumber);
+        if (roomOccupied) {
             this.startGame();
         }
-        this.waitingForPlayerTwo = false;
     }
 
     public onLeave(client: Client): void {
@@ -36,11 +40,15 @@ export default class GameRoom extends Room<Arena> {
     }
 
     private startGame(): void {
+        this.state.refreshAllPlayersPositions();
         this.setSimulationInterval(() => {
             const gameStatus = this.state.makeGameStep();
             if (gameStatus.finished) {
                 this.stopGame(gameStatus);
+            } else {
+                this.sendMessageToPlayers(gameStatus.players, false);
             }
+            this.state.flushGameStep();
         }, 100);
     }
 
@@ -48,12 +56,19 @@ export default class GameRoom extends Room<Arena> {
         if (gameStatus.isDraw) {
             this.broadcast('Draw :o');
         } else {
-            Player.loopMap(gameStatus.players, (player: Player) => {
-                const message = player.isAlive ? 'You win :D' : 'You lose :/';
-                this.send(player.getClientObject(), message);
-            });
+            this.sendMessageToPlayers(gameStatus.players, true);
         }
         this.disconnect();
+    }
+
+    private sendMessageToPlayers(players: MapSchema<Player>, canSendWinMessage: boolean): void {
+        Player.loopMap(players, (player: Player) => {
+            if (player.isAlive && ! canSendWinMessage) {
+                return;
+            }
+            const message = player.isAlive ? 'You win :D' : 'You lose :/';
+            this.send(player.getClientObject(), message);
+        });
     }
 
 }

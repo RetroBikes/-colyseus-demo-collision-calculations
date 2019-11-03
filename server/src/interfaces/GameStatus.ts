@@ -1,5 +1,5 @@
-import Player from '../schemas/Player';
 import { MapSchema } from '@colyseus/schema';
+import Player from '../schemas/Player';
 
 export default interface GameStatus {
 

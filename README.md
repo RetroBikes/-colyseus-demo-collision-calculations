@@ -32,7 +32,7 @@ On start positions, negative values means counting from right (on x axis) or bot
 
 This would a great place to set the players default colors, by example.
 
-__The array on initialStates can't have minus items than clientsToPlay number or the server will break by the initial states information lack__
+__The array on initialStates can't have minus items than clientsToPlay number or the server will break down by the initial player states information lack.__
 
 Gameconfig file example, this considers four players, starting on each corner of the game area:
 ```json
@@ -71,9 +71,18 @@ Gameconfig file example, this considers four players, starting on each corner of
     ]
 }
 ```
+
+## Going into the mathinery (hahaha I'm sorry)
+This game works with virtual and physical sizes and locations. This means the server deal only with integer numbers starting with zero and ending with the game area size minus 1 (basic array setting). The client side will have to make all the calculus to place all the stuff in the right places, as the examples below:
+
+This calculate  
+*stepSize = physical area size / virtual area size*
+
+*physical position (x or y) = virtual position (x or y) * stepSize*
+
  
- ## Powered by
-  * [Colyseus multiplayer game framework](https://colyseus.io/) - make the hard calculations on the server and handle events on the client
-  * [Arwes react theme](https://arwes.dev/) - this visuals and effects pulled me into react
-  * [React itself](https://reactjs.org/) - because the Arwes theme and just to learn :v
-  * [Konva canvas library](https://konvajs.org/docs/react/index.html) - to draw the gamearea
+## Powered by
+ * [Colyseus multiplayer game framework](https://colyseus.io/) - make the hard calculations on the server and handle events on the client
+ * [Arwes react theme](https://arwes.dev/) - this visuals and effects pulled me into react
+ * [React itself](https://reactjs.org/) - because the Arwes theme and just to learn :v
+ * [Konva canvas library](https://konvajs.org/docs/react/index.html) - to draw the gamearea

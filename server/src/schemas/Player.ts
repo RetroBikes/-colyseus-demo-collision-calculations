@@ -4,21 +4,54 @@ import Coordinate from './Coordinate';
 import GenericObject from '../interfaces/GenericObject';
 import PlayerInitialState from '../interfaces/PlayerInitialState';
 
+/**
+ * All the data the player needs to exists on the game, like current position, direction and goes on.
+ * This extends the Schema Colyseus class to be passed to client side.
+ */
 export default class Player extends Schema {
 
+    /**
+     * Current player x / y position.
+     * Flagged to be passed to client side.
+     * @type string
+     */
     @type(Coordinate)
     public currentPosition: Coordinate;
 
+    /**
+     * Player direction, basicly defines the next player position on move method.
+     * Flagged to be passed to client side.
+     * @type Coordinate
+     */
     @type('string')
     public direction = 'right';
 
-    @type('boolean')
+    /**
+     * Defines if the player char is alive. Heavily used on the game step (GameRoom and Arena
+     * classes) to define if the player need to be removed of the game area or the game is finished.
+     * @type boolean
+     */
     public isAlive = true;
 
+    /**
+     * Player client object. Used to send message on player win or defeat.
+     * @type Client
+     */
     private clientObject: Client;
 
+    /**
+     * Define if the player can change their direction.
+     * Basicly, the player can't do two moves per game loop iteration
+     * to guarantee he/she can't move to the own way and lose.
+     * @type boolean
+     */
     private canChangeDirection = true;
 
+    /**
+     * Opposite directions object, used to deny the player change their
+     * direction to the opposite direction, losing in the process.
+     * @type GenericObject<string>
+     */
     private oppositeDirections: GenericObject<string> = {
         up: 'down',
         right: 'left',

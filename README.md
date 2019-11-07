@@ -9,7 +9,7 @@ As the players loses the game his occuped area will be freed, but the player sti
 
 Because this still is a demo, all the visuals are very simple, as the fact the only forms to identify yourself is try to change direction (and risk lose the game), but this is a good start to build all this things.
 
-## 🏃 Kickstart the code
+## 🏃 How to run the code
  * Do the clone: `https://github.com/RetroBikes/demo.git`
  * Go to server directory and start him
    * `cd demo/server`
@@ -95,10 +95,8 @@ Do not worry, there is an practical example on client-react directory. [Just cli
 
 ----------------
 
-##### 💜 Made with love by an [cyberpunk coding enthusiast](https://github.com/VictorHugoBatista)
+##### 💜 Made with love by an [cyberpunk and coding enthusiast](https://github.com/VictorHugoBatista)
 
 ----------------
 
 ###### 	💻 Flynn lives
-
-----------------

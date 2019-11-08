@@ -1,7 +1,7 @@
 import { Schema, type } from '@colyseus/schema';
 
 /**
- * Basicly holds a x / y coordinate. Can give the stringfied version too.
+ * Basically holds a x / y coordinate. Can give the stringfied version too.
  * Only this. Just separation of concerns ;-)
  * This extends the Schema Colyseus class to be passed to client side.
  */

@@ -19,7 +19,7 @@ export default class Player extends Schema {
     public currentPosition: Coordinate;
 
     /**
-     * Player direction, basicly defines the next player position on move method.
+     * Player direction, basically defines the next player position on move method.
      * Flagged to be passed to client side.
      * @type Coordinate
      */
@@ -41,7 +41,7 @@ export default class Player extends Schema {
 
     /**
      * Define if the player can change their direction.
-     * Basicly, the player can't do two moves per game loop iteration
+     * Basically, the player can't do two moves per game loop iteration
      * to guarantee he/she can't move to the own way and lose.
      * @type boolean
      */
@@ -59,6 +59,11 @@ export default class Player extends Schema {
         left: 'right',
     };
 
+    /**
+     * Create new player with initial state setted.
+     * @param client Player client object.
+     * @param initialState Initial state, includes the first location and direction.
+     */
     public constructor(client: Client, initialState: PlayerInitialState) {
         super();
         this.clientObject = client;
@@ -66,6 +71,10 @@ export default class Player extends Schema {
         this.currentPosition = initialState.startPosition;
     }
 
+    /**
+     * Refresh the current position recreating a new object.
+     * This forces the sending of the data to all clients connected to the current game.
+     */
     public refreshCurrentPosition(): void {
         this.currentPosition = new Coordinate(
             this.currentPosition.x,
@@ -73,6 +82,13 @@ export default class Player extends Schema {
         );
     }
 
+    /**
+     * Change the player direction, if the new direction isn't equal to current direction
+     * and the player not changed their direction on this game step (game loop iteration).
+     * Deny the direction changing on current player after a successful direction changing.
+     * This state will be reseted on current game step ending.
+     * @param direction new direction to change
+     */
     public changeDirection(direction: string): void {
         if (! this.canChangeDirection ||
             this.direction === this.oppositeDirections[direction]) {
@@ -82,6 +98,10 @@ export default class Player extends Schema {
         this.denyChangeDirection();
     }
 
+    /**
+     * Just make a move, based on the current player direction.
+     * This action send the updated player data to all clients connected to the current game.
+     */
     public move(): void {
         const newPosition = this.currentPosition;
         switch(this.direction) {
@@ -101,28 +121,57 @@ export default class Player extends Schema {
         this.updateCurrentPosition(newPosition);
     }
 
+    /**
+     * Just allow the player to change direction.
+     * Called on end of each game loop.
+     */
     public allowChangeDirection(): void {
         this.canChangeDirection = true;
     }
 
+    /**
+     * Stop the direction changes to current player.
+     * Called after a direction changing.
+     */
     public denyChangeDirection(): void {
         this.canChangeDirection = false;
     }
 
+    /**
+     * Just change the player isAlive status to false.
+     */
     public kill(): void {
         this.isAlive = false;
     }
 
+    /**
+     * Return the player client object.
+     */
     public getClientObject(): Client {
         return this.clientObject;
     }
 
+    /**
+     * Loop through a player MapSchema on the functional way. Static
+     * method, is called from the class, not a player object.
+     * Example:
+     * Player.loopMap(myMap, (player: Player, playerId: string) => {
+     *   console.log(player, playerId);
+     * });
+     * @param players Players map to loop
+     * @param callback Method to call on each iteration. Receives the player and their id.
+     */
     public static loopMap(players: MapSchema<Player>, callback: Function): void {
         for (let playerId in players) {
             callback(players[playerId], playerId);
         }
     }
 
+    /**
+     * Just update the player current position.
+     * This action send the updated player data to all clients connected to the current game.
+     * @param newPlayerPosition 
+     */
     private updateCurrentPosition(newPlayerPosition: Coordinate): void {
         this.currentPosition = newPlayerPosition;
     }

@@ -36,7 +36,7 @@ export default class Coordinate extends Schema {
     }
 
     /**
-     * Return an stringfied version of the coordinate.
+     * Return a stringfied version of the coordinate.
      * Good to compare if two coordinates are equals.
      */
     public toString(): string {

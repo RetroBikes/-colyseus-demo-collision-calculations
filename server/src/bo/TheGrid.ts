@@ -54,7 +54,7 @@ export default class TheGrid {
     }
 
     /**
-     * Occupy a game space with x / y and an player id.
+     * Occupy a game space with x / y and a player id.
      * @param spaceCoordinate Space coordinate x / y
      * @param playerId Player id for identify the space occupied
      */
@@ -67,7 +67,7 @@ export default class TheGrid {
 
     /**
      * Check if the passed coordinate is occupied.
-     * Consider the space candidates object too, if has an space
+     * Consider the space candidates object too, if has a space
      * candidate for another player id, consider occupied too.
      * @param spaceCoordinate Space coordinate x / y
      * @param playerId Used for check the space candidates object

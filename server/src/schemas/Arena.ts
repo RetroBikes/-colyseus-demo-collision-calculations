@@ -103,12 +103,21 @@ export default class Arena extends Schema {
         });
     }
 
+    /**
+     * Process a game loop iteration. Includes moving all the players,
+     * calculating the collisions and return the resulting game status after .
+     */
     public makeGameStep(): GameStatus {
         this.moveAllPlayers();
         this.calculateCollisions();
         return this.getGameStatus();
     }
 
+    /**
+     * Prepare the players map and the game grid to the next game step.
+     * Occupy the current game step location on game grid and allow changing
+     * direction for each alive players. Remove the defeated player from game.
+     */
     public flushGameStep(): void {
         Player.loopMap(this.players, (player: Player, playerId: string) => {
             if (player.isAlive) {
@@ -120,6 +129,9 @@ export default class Arena extends Schema {
         });
     }
 
+    /**
+     * Create Coordinate objects of the start posisiton objects received from the gameconfig.json file.
+     */
     private formatPlayersInitialState(): void {
         this.playersInitialState = this.playersInitialState.map(state => {
             return {
@@ -134,6 +146,11 @@ export default class Arena extends Schema {
         });
     }
 
+    /**
+     * Move all players and refresh the space candidates on game grid.
+     * If the game grid spaces are directly occupied, all the states
+     * will be overridden before the collision calculus. See more on TheGrid class.
+     */
     private moveAllPlayers(): void {
         Player.loopMap(this.players, (player: Player, playerId: string) => {
             player.move();
@@ -141,6 +158,10 @@ export default class Arena extends Schema {
         });
     }
 
+    /**
+     * Calculate the collisions for each players and change the isAlive state to false for all defeated players.
+     * All the defeated players will be removed from game area on game step flush and will be notified with a 'You lose' message.
+     */
     private calculateCollisions(): void {
         Player.loopMap(this.players, (player: Player, playerId: string) => {
             if (this.grid.isSpaceOccupied(player.currentPosition, playerId)) {
@@ -149,6 +170,12 @@ export default class Arena extends Schema {
         });
     }
 
+    /**
+     * Generate the game status object of the current game state.
+     * The game status object includes the players MapSchema and the flags finished and isDraw.
+     * The game ends if there is only one player alive (or no players alive, the draw case).
+     * For more see the flushGameStep method on this class and startGame method on GameRoom class.
+     */
     private getGameStatus(): GameStatus {
         let playersAlive = 0,
             finished = false,
@@ -169,6 +196,12 @@ export default class Arena extends Schema {
         };
     }
 
+    /**
+     * Just check if a player exists by the player id. Prevent the server to break in
+     * case of try to move after defeat, by example. In this case the player object is already
+     * deleted but the player connected to watch the rest of the game, if they want to.
+     * @param playerId Client id for check the player existence
+     */
     private playerExists(playerId: string): boolean {
         return 'undefined' !== typeof this.players[playerId];
     }

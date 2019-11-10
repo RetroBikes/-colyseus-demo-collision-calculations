@@ -26,10 +26,10 @@ class Home extends React.Component {
               </Layer>
             </Stage>
           </Frame>
-          <Heading node='h1'>React Colyseus Demo IV</Heading>
-          <Heading node='h2'>More players</Heading>
+          <Heading node='h1'>RetroBykes</Heading>
+          <Heading node='h2'>Demo version</Heading>
           <Button animate layer='alert'>
-            <Link href="/game">Start demo</Link>
+            <Link href="/game">Enter the cyberspace</Link>
           </Button>
         </div>
       </div>
